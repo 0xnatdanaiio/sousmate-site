@@ -1,0 +1,1121 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SousMate: food safety records for NZ kitchens</title>
+<meta name="description" content="Less paperwork. More cooking. SousMate tells you what's due and keeps every Food Act record safe. For New Zealand cafés, bakeries, food trucks and home kitchens. Works offline on phone, tablet and PC.">
+<meta name="theme-color" content="#0E2A2C">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SousMate">
+<meta property="og:title" content="SousMate: less paperwork, more cooking">
+<meta property="og:description" content="Tells you what's due. Keeps every record safe. Food safety records for New Zealand food businesses, on paper no more.">
+<meta property="og:url" content="https://sousmate.co.nz/">
+<meta property="og:locale" content="en_NZ">
+<meta property="og:image" content="https://sousmate.co.nz/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="SousMate: Less paperwork. More cooking. A phone showing the Today screen with checks still to do and done.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://sousmate.co.nz/og-image.png">
+<meta name="twitter:image:alt" content="SousMate: Less paperwork. More cooking. A phone showing the Today screen with checks still to do and done.">
+<link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* Kitchen ink tokens: docs/design/design-system.md section 1 */
+:root{
+  --ink:#0E2A2C; --ink-raised:#1C3D40; --teal:#0B6B72; --teal-dark:#08555B;
+  --mint:#8EE6C9; --wash:#DFF5EE; --surface:#E7EEEC; --paper:#FFFFFF; --quiet:#F3F7F6;
+  --muted:#4A5E60; --muted-ink:#A9C4C2; --line:#6F8885; --warn:#A9440C; --warn-dark:#7E3209; --warn-tint:#FBE6D9;
+  --wrap:1200px;
+  /* Phone mock-ups and the try-it card: the app as shipped, contrast option A light (src/index.css :root,
+     docs/design/contrast-notes.md section 4, design-system.md section 17). Mock-ups only; the page keeps its own tokens. */
+  --m-bg:#D9E3E1; --m-card:#FFFFFF; --m-muted:#43585A; --m-line-input:#5C7471; --m-icon:#E3EBE9;
+  --m-edge:#6A817E; --m-shadow:0 1px 2px rgba(14,42,44,.14); --m-done:#DFF5EE; --m-disabled:#D5DFDC;
+  --m-btn2-edge:#5C7471; --m-chip-edge:#5C7471; --m-opt-edge:#6A817E;
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+/* Inter variable (SIL OFL 1.1, fonts/OFL-Inter.txt), self-hosted: no request to Google or any other origin. */
+@font-face{font-family:'Inter Variable';font-style:normal;font-display:swap;font-weight:100 900;src:url('fonts/inter-latin-ext-wght-normal.woff2') format('woff2-variations');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Inter Variable';font-style:normal;font-display:swap;font-weight:100 900;src:url('fonts/inter-latin-wght-normal.woff2') format('woff2-variations');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+body{margin:0;font-family:'Inter Variable','Inter',system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--ink);background:var(--paper);font-size:18px;line-height:1.5;overflow-x:hidden}
+img,svg{display:block}
+h1,h2,h3,p{margin:0}
+a{color:var(--teal)}
+a:hover{color:var(--teal-dark)}
+:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+.ink :focus-visible,.cta :focus-visible{outline-color:var(--mint)}
+.cta :focus-visible{outline-color:var(--paper)}
+.skip{position:absolute;left:12px;top:-100px;z-index:10;background:var(--mint);color:var(--ink);font-weight:700;padding:12px 18px;border-radius:9999px;text-decoration:none}
+.skip:focus{top:12px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 20px}
+@media (min-width:720px){.wrap{padding:0 32px}}
+
+/* type */
+.display{font-weight:900;text-transform:uppercase;letter-spacing:-0.045em;line-height:.88}
+h1.display{font-size:clamp(44px,13vw,112px);letter-spacing:-0.05em}
+h2.display{font-size:clamp(36px,8vw,80px)}
+.lead{font-size:clamp(19px,2.2vw,24px);line-height:1.35}
+.mint{color:var(--mint)}
+.kicker{font-size:15px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:var(--teal-dark)}
+.ink .kicker{color:var(--mint)}
+
+/* buttons: pills, no shadows */
+.btns{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:56px;padding:0 28px;border-radius:9999px;font-weight:700;font-size:18px;text-decoration:none;border:2px solid transparent;transition:background-color .15s,color .15s}
+.btn svg{flex:none}
+.btn-mint{background:var(--mint);color:var(--ink)}
+.btn-mint:hover{background:#B5F0DC;color:var(--ink)}
+.btn-ghost{border-color:#FFFFFF;color:#FFFFFF}
+.btn-ghost:hover{background:#FFFFFF;color:var(--ink)}
+.btn-teal{background:var(--teal);color:#FFFFFF}
+.btn-teal:hover{background:var(--teal-dark);color:#FFFFFF}
+.btn-line{border-color:var(--teal);color:var(--teal);background:var(--paper)}
+.btn-line:hover{background:var(--wash);color:var(--teal-dark)}
+.btn-white{background:#FFFFFF;color:var(--ink)}
+.btn-white:hover{background:var(--wash);color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.btn{transition:none}}
+
+/* header */
+.ink{background:var(--ink);color:#FFFFFF}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;padding-bottom:14px}
+.brand{display:inline-flex;align-items:center;gap:10px;min-height:48px;color:#FFFFFF;text-decoration:none;font-weight:800;font-size:22px;letter-spacing:-0.02em}
+.brand img{width:40px;height:40px}
+.brand:hover{color:#FFFFFF}
+.nav{display:flex;align-items:center;gap:4px}
+.nav a.link{display:none;align-items:center;min-height:48px;padding:0 14px;border-radius:9999px;color:#FFFFFF;text-decoration:none;font-weight:600;font-size:16px}
+.nav a.link:hover{background:var(--ink-raised);color:#FFFFFF}
+.nav .btn{min-height:48px;padding:0 18px;font-size:16px}
+@media (min-width:860px){.nav a.link{display:inline-flex}}
+/* Sign in stays visible on phones too (the other links fold away below 860 px). */
+.nav a.signin{display:inline-flex;white-space:nowrap;margin-right:16px}
+.nav .btn{white-space:nowrap}
+/* Phones under 420 px: tighten the header so brand, Sign in and Free demo fit on one line. Under 360 px the
+   brand word folds away (the icon stays, and the link keeps its aria-label). */
+@media (max-width:419px){.top{gap:6px}.nav{gap:2px}.brand{gap:8px;font-size:19px}.brand img{width:34px;height:34px}.nav a.signin{padding:0 10px;font-size:15px;margin-right:10px}.nav .btn{padding:0 14px;font-size:15px}}
+@media (max-width:359px){.brand > span{display:none}}
+
+/* hero */
+.hero{display:grid;gap:40px;padding-top:36px;padding-bottom:0;align-items:end}
+.hero-copy{display:flex;flex-direction:column;gap:24px;padding-bottom:8px}
+.hero .sub{color:var(--muted-ink);max-width:560px}
+.hero .sub b{color:#FFFFFF;font-weight:700}
+.for{font-size:15px;color:var(--muted-ink);max-width:520px}
+.hero-phone{display:flex;justify-content:center;margin-bottom:-120px}
+@media (min-width:980px){
+  .hero{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);padding-top:56px}
+  .hero-copy{padding-bottom:180px}
+}
+.after-hero{height:150px;background:var(--paper)}
+
+/* phone mock-ups (HTML copies of the prototype boards and the live app, decorative). Boards: Main, Due, History,
+   Fridge, FreezerTemp; design-system.md sections 12 (header, section heading, bottom nav) and 13 (sign slot, countdown bar, period select). */
+figure{margin:0}
+.phone{--z:.74;width:calc(390px * var(--z) + 20px);border:10px solid var(--ink);border-radius:46px;background:linear-gradient(var(--ink) 50%,var(--m-bg) 50%);overflow:hidden;flex:none}
+.ink .phone{border-color:var(--ink-raised)}
+/* narrow phones (320-389 px): the how-it-works and What's due phones fit the 280 px column */
+@media (max-width:389px){.how .phone,.dueg .phone{--z:.66}}
+@media (min-width:420px){.phone{--z:.8}}
+@media (min-width:980px){.hero-phone .phone,.how .phone,.dueg .phone{--z:.9}}
+.screen{zoom:var(--z);width:390px;height:760px;display:flex;flex-direction:column;background:linear-gradient(var(--ink) 40px,var(--m-bg) 40px);color:var(--ink);font-size:16px;line-height:1.3;overflow:hidden;position:relative}
+.screen.tall{height:800px}
+.screen.round{height:860px}
+.screen.today{height:850px}
+/* Header A on the main tabs: shop name, NZ date, big title (44 px on phones, same on every tab) */
+.hd{flex:none;position:relative;z-index:1;background:var(--ink);color:#FFFFFF;border-radius:0 0 28px 28px;padding:10px 20px 20px;display:flex;flex-direction:column}
+.hd.flat{border-radius:0}
+/* room for the phone frame's rounded top corners (a status-bar area), so no header text is clipped */
+.screen>.hd:first-child{padding-top:30px}
+.hd-proto{margin-bottom:4px;font-size:12px;line-height:1.25;color:var(--muted-ink)}
+.hd-top{display:flex;align-items:center;gap:12px;min-height:48px}
+.hd-lines{flex:1;min-width:0}
+.hd-shop{font-size:15px;font-weight:700;line-height:1.25;white-space:nowrap}
+.hd-date{margin-top:2px;font-size:14px;line-height:1.25;color:var(--muted-ink);white-space:nowrap}
+.hd-title{margin-top:10px;font-size:44px;line-height:.9;font-weight:900;letter-spacing:-0.045em;text-transform:uppercase;white-space:nowrap}
+/* sub-screen header: Back + smaller title (32 px) */
+.sub-top{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:48px}
+.sub-top .hd-proto{margin:0}
+.back{display:flex;align-items:center;gap:4px;font-size:15px;font-weight:600}
+.sub-title{margin-top:6px;font-size:32px;line-height:.95;font-weight:900;letter-spacing:-0.045em;text-transform:uppercase}
+.rule{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}
+.rule b{display:flex;align-items:center;gap:6px;font-size:16px}
+.rule u{font-size:15px;font-weight:700}
+.sb{flex:1;padding:16px;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+/* shift chip */
+.chip{flex:none;display:flex;align-items:center;gap:8px;height:48px;padding:0 14px 0 8px;border-radius:9999px;background:var(--ink-raised);font-weight:600;font-size:15px}
+.av{width:32px;height:32px;border-radius:9999px;background:var(--mint);color:var(--ink);display:flex;align-items:center;justify-content:center;font-weight:700}
+/* Today */
+.thero{margin:-16px -16px 0;padding:0 20px 20px;background:var(--ink);border-radius:0 0 28px 28px;display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px}
+.pill-m{display:inline-flex;align-items:center;height:36px;padding:0 14px;border-radius:9999px;background:var(--mint);color:var(--ink);font-weight:700;font-size:14px}
+.backed{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted-ink)}
+.banner{display:flex;align-items:center;gap:12px;min-height:52px;padding:8px 12px 8px 14px;border-radius:28px;background:var(--m-card);border:2px solid var(--warn);font-size:15px}
+.banner span{flex:1}
+.banner b{color:var(--warn-dark)}
+.banner i{font-style:normal;color:var(--m-muted)}
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.quick div{height:72px;border-radius:20px;background:var(--m-card);border:1px solid var(--m-edge);box-shadow:var(--m-shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-weight:700;font-size:15px}
+/* section heading: one style, uppercase */
+.h2s{font-weight:900;font-size:20px;line-height:1.1;letter-spacing:-0.03em;text-transform:uppercase;display:flex;align-items:center;gap:8px;margin-top:8px}
+.h2s .tag{text-transform:none;letter-spacing:0}
+.n{display:inline-flex;min-width:22px;height:22px;padding:0 6px;border-radius:20px;background:var(--ink);color:#FFFFFF;font-size:13px;letter-spacing:0;align-items:center;justify-content:center}
+/* cards: a 1 px edge and a slight shadow (contrast-a 5.1); Done on the mint wash; optional cards see-through and dashed (5.5) */
+.card{background:var(--m-card);border:1px solid var(--m-edge);box-shadow:var(--m-shadow);border-radius:20px;padding:12px 14px 12px 12px;display:flex;gap:12px;align-items:center;min-height:56px}
+.card.done{background:var(--m-done)}
+.card.opt{background:transparent;box-shadow:none;border:1.5px dashed var(--m-opt-edge)}
+.ico{flex:none;width:44px;height:44px;border-radius:9999px;background:var(--m-bg);display:flex;align-items:center;justify-content:center}
+.done .ico,.opt .ico{background:var(--m-card)}
+.secq{display:flex;flex-direction:column;gap:2px;margin-top:4px;padding-top:12px;border-top:1px dashed var(--m-line-input)}
+.secq .h2s{margin:0;font-size:16px}
+.secq p{font-size:14px;color:var(--m-muted)}
+.otag{display:inline-block;font-size:13px;font-weight:700;padding:2px 8px;border-radius:9999px;border:1.5px solid currentColor;color:var(--m-muted);letter-spacing:0;text-transform:none;white-space:nowrap}
+.ct{font-size:18px;line-height:1.1;font-weight:700;letter-spacing:-0.01em}
+.cs{margin-top:2px;font-size:15px;color:var(--m-muted);display:flex;align-items:center;gap:6px}
+.cs.warn{color:var(--warn-dark);font-weight:700}
+.grow{flex:1;min-width:0}
+.dots{display:inline-flex;gap:4px}
+.dots i{width:12px;height:12px;border-radius:6px;border:2px solid var(--teal)}
+.dots i:first-child{background:var(--teal)}
+.stamp{flex:none;display:inline-flex;align-items:center;height:28px;padding:0 10px;border-radius:9999px;background:#FFFFFF;color:var(--teal-dark);font-weight:700;font-size:13px;white-space:nowrap}
+/* bottom nav: strip + pill, current tab in mint */
+.sdock{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:12px;background:linear-gradient(to bottom,rgba(217,227,225,0) 0,var(--m-bg) 12px);display:flex;flex-direction:column;gap:10px}
+.snav{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;padding:4px;border:1px solid var(--ink);border-radius:9999px;background:var(--ink)}
+.snav span{height:56px;border-radius:9999px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:13px;font-weight:600;letter-spacing:-0.01em;color:#FFFFFF;white-space:nowrap}
+.snav span.on{background:var(--mint);color:var(--ink);font-weight:700}
+/* What's due date cards with the countdown bar */
+.due{background:var(--m-card);border:1px solid var(--m-edge);box-shadow:var(--m-shadow);border-radius:20px;padding:12px 14px 12px 12px;display:flex;flex-direction:column;gap:8px}
+.row{display:flex;align-items:center;gap:10px}
+.dtl{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.why{font-size:15px;font-weight:700;color:var(--teal);text-decoration:underline}
+.numrow{display:flex;align-items:baseline;gap:8px;padding-left:54px;font-size:16px;font-weight:700}
+.num{font-size:32px;line-height:1;font-weight:800;letter-spacing:-0.02em;color:var(--teal)}
+.cd{padding-left:54px;display:flex;flex-direction:column;gap:6px}
+.cd-track{height:8px;border-radius:9999px;background:var(--surface);overflow:hidden;box-shadow:inset 0 0 0 1px #DDE6E4}
+.cd-track i{display:block;height:8px;border-radius:9999px}
+.cd-lbl{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 12px;font-size:14px;line-height:1.3;color:var(--m-muted)}
+.cd-lbl b{color:var(--ink);font-weight:700}
+.help{padding-left:54px;font-size:14px;line-height:1.35;color:var(--m-muted)}
+.tag{display:inline-block;font-size:13px;font-weight:700;padding:2px 8px;border-radius:9999px;border:1.5px solid currentColor;white-space:nowrap}
+.tag.up{color:var(--teal)}
+.tag.good{background:var(--wash);color:var(--teal-dark);border-color:var(--wash)}
+.go{height:48px;border-radius:9999px;border:2px solid var(--teal);color:var(--teal);font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:6px}
+figcaption{margin-top:14px;text-align:center;font-size:15px;font-weight:600;color:var(--muted)}
+.ink figcaption{color:var(--muted-ink)}
+
+/* sections */
+section{scroll-margin-top:16px}
+.pad{padding-top:72px;padding-bottom:72px}
+@media (min-width:980px){.pad{padding-top:112px;padding-bottom:112px}}
+.stack{display:flex;flex-direction:column;gap:20px}
+
+/* product cards, right under the hero (Due, Fridge and Verify boards) */
+.vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.pcards{display:grid;gap:16px;padding-bottom:24px}
+@media (min-width:760px){.pcards{grid-template-columns:repeat(2,minmax(0,1fr))}.pc3{grid-column:1 / -1}}
+.pc{border-radius:28px;padding:28px 20px 32px;display:flex;flex-direction:column;gap:28px;overflow:hidden;min-width:0}
+@media (min-width:420px){.pc{padding:32px 24px 36px}}
+@media (min-width:980px){.pc{padding:44px 40px 48px}}
+.pc1{background:var(--mint);color:var(--ink)}
+.pc2{background:var(--ink);color:#FFFFFF}
+.pc3{background:var(--surface);color:var(--ink)}
+.pc-copy{display:flex;flex-direction:column;gap:12px;max-width:520px}
+.pc h3{font-weight:900;font-size:clamp(32px,4.4vw,48px);line-height:1;letter-spacing:-0.04em}
+.pc-copy p{font-size:18px;line-height:1.45}
+.pc1 .pc-copy p{color:var(--ink)}
+.pc2 .pc-copy p{color:var(--muted-ink)}
+.pc3 .pc-copy p{color:var(--muted)}
+.pc-vis{display:flex;justify-content:center;margin-top:auto}
+.pc .phone{--z:.66}
+.pc2 .phone{border-color:var(--ink-raised)}
+/* cards 1 and 2 sit side by side: same phone height as the fridge round screen */
+.pc1 .screen{height:860px}
+/* cards lift a little under a mouse pointer; touch screens and reduced motion keep them still */
+@media (hover:hover) and (prefers-reduced-motion:no-preference){
+  .pc{transition:transform .25s ease,box-shadow .25s ease}
+  .pc:hover{transform:translateY(-8px);box-shadow:0 18px 40px rgba(14,42,44,.18)}
+  .pc .phone{transition:transform .35s ease}
+  .pc:hover .phone{transform:translateY(-6px)}
+}
+@media (min-width:390px){.pc .phone{--z:.7}}
+@media (min-width:420px){.pc .phone{--z:.74}}
+@media (min-width:760px){.pc .phone{--z:.66}}
+@media (min-width:980px){.pc .phone{--z:.8}}
+/* card 3: text and PDF page on the left, phone on the right */
+.pc3{display:grid;gap:28px;padding-bottom:0}
+.pc3 .pc-paper{display:flex;justify-content:center}
+@media (min-width:760px){
+  .pc3{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto 1fr;column-gap:32px;row-gap:28px;padding-bottom:0}
+  .pc3 .pc-copy{grid-column:1;grid-row:1}
+  .pc3 .pc-paper{grid-column:1;grid-row:2;align-items:flex-end;justify-content:flex-start}
+  .pc3 .pc-vis{grid-column:2;grid-row:1 / span 2;padding-bottom:36px;align-items:flex-start}
+}
+@media (min-width:980px){.pc3{column-gap:56px}.pc3 .pc-vis{padding-bottom:48px}}
+/* gauge and status boxes (fridge round, how-it-works phone and the try-it card) */
+.deg{font-size:22px;font-weight:800;color:var(--m-muted);letter-spacing:-0.02em}
+.track{position:relative;height:28px;border-radius:20px;background:var(--quiet);border:2px solid var(--m-line-input)}
+.track .safe{position:absolute;left:0;top:0;bottom:0;width:50%;background:var(--wash);border-right:2px solid var(--teal);border-radius:9999px 0 0 9999px;display:flex;align-items:center;gap:4px;padding-left:8px;font-size:13px;font-weight:700;color:var(--teal-dark)}
+.track .tw{position:absolute;right:10px;top:0;bottom:0;display:flex;align-items:center;font-size:13px;font-weight:700;color:var(--warn-dark)}
+.track .mark{position:absolute;top:-8px;bottom:-8px;width:6px;margin-left:-3px;border-radius:3px;background:var(--ink);border:2px solid #FFFFFF;box-sizing:content-box}
+.five{text-align:center;font-size:13px;font-weight:700;color:var(--m-muted);margin-top:2px}
+.okline{padding:10px 12px;border-radius:28px;background:var(--wash);color:var(--teal-dark);font-weight:700;font-size:16px}
+/* signed temperature field: sign slot inside the border on the left, number, then °C (design-system 13) */
+.sfield{display:flex;align-items:center;gap:4px;height:64px;border:2px solid var(--m-line-input);border-radius:16px;background:#FFFFFF;padding:0 14px 0 6px}
+.sfield .sign{flex:none;width:48px;height:48px;border-radius:12px;border:1.5px solid var(--m-line-input);background:var(--m-icon);color:var(--ink);display:flex;align-items:center;justify-content:center;padding:0 0 3px;font-size:30px;line-height:1;font-weight:800}
+.sfield .sv{flex:1;min-width:0;padding-left:10px;font-size:32px;font-weight:800;letter-spacing:-0.02em}
+.sfield .sv.ph{color:#A3B5B2}
+.readback{font-size:15px;font-weight:700}
+/* fridge round */
+.fcard{background:var(--m-card);border:1px solid var(--m-edge);box-shadow:var(--m-shadow);border-radius:20px;padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px}
+.vcard{background:var(--m-card);border:1px solid var(--m-edge);box-shadow:var(--m-shadow);border-radius:20px;padding:14px 16px}
+.whorow{display:flex;align-items:center;gap:10px;min-height:48px;font-size:16px}
+.whorow b{font-weight:700}
+/* the who-row Change is a real outline button (contrast-a 5.3) */
+.whorow u{flex:none;display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:9999px;border:2px solid var(--m-btn2-edge);background:#FFFFFF;color:var(--ink);font-weight:700;font-size:15px;text-decoration:none}
+.timef{display:flex;align-items:center;gap:10px;padding-top:8px;border-top:1px solid #DDE6E4}
+.timef p{font-size:15px;font-weight:700}
+.timef .in{flex:1;height:48px;border:2px solid var(--m-line-input);border-radius:16px;display:flex;align-items:center;padding:0 14px;font-size:16px}
+.chk{background:var(--m-done);border:1px solid var(--m-edge);box-shadow:var(--m-shadow);border-radius:20px;padding:12px 14px 12px 16px;min-height:56px;display:flex;align-items:center;gap:10px}
+.chk .t{font-size:25px;color:var(--teal);font-weight:800;letter-spacing:-0.02em}
+.okp{display:inline-flex;align-items:center;padding:1px 8px;border-radius:20px;background:#FFFFFF;color:var(--teal-dark);font-weight:700;font-size:14px}
+.save{height:56px;border-radius:9999px;background:var(--teal);color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px}
+.save.off{background:var(--m-disabled);color:var(--m-muted)}
+/* freezer docket in the round (contrast-a crit. 5): the optional signed field first, then the filled Still frozen toggle
+   (ring mark = not pressed), then Not frozen or freezer fault as a neutral 48 px outline button */
+.fzname{font-size:18px;font-weight:700;letter-spacing:-0.01em}
+.flbl{font-size:15px;font-weight:700}
+.sfield.small{height:56px}
+.sfield.small .sv{font-size:28px}
+.hint{font-size:14px;line-height:1.35;color:var(--m-muted)}
+.fz{display:flex;align-items:center;justify-content:center;gap:10px;min-height:56px;border-radius:9999px;border:2px solid var(--teal);background:var(--teal);color:#FFFFFF;font-weight:700;font-size:17px}
+.fz .mk{flex:none;width:24px;height:24px;border-radius:12px;border:2.5px solid currentColor}
+.btn2{display:flex;align-items:center;justify-content:center;min-height:48px;padding:0 16px;border-radius:9999px;border:2px solid var(--m-btn2-edge);background:#FFFFFF;color:var(--ink);font-weight:700;font-size:15px;text-align:center}
+/* choice chips with a 2 px edge (contrast-a 5.4); the chosen one is ink */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{display:inline-flex;align-items:center;min-height:48px;padding:0 14px;border-radius:9999px;border:2px solid var(--m-chip-edge);background:#FFFFFF;font-size:15px;font-weight:700}
+.chips span.on{background:var(--ink);border-color:var(--ink);color:#FFFFFF}
+.lbl{font-size:16px;font-weight:700}
+.lnk{display:inline-flex;align-items:center;min-height:44px;font-size:15px;font-weight:700;color:var(--teal);text-decoration:underline;text-underline-offset:3px}
+.range{display:flex;align-items:center;gap:8px;min-height:48px}
+.range p{flex:1;font-size:16px;font-weight:700}
+.ans{display:flex;align-items:center;justify-content:center;min-height:56px;border-radius:9999px;font-weight:700;font-size:17px}
+.ans.ok{background:var(--teal);color:#FFFFFF}
+.ans.bad{border:2px solid var(--warn);background:#FFFFFF;color:var(--warn-dark)}
+/* History: Inspection day */
+.pbox{background:var(--ink);color:#FFFFFF;border-radius:20px;padding:16px;display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.psel{display:inline-flex;align-items:center;gap:12px;height:48px;padding:0 14px 0 16px;border-radius:9999px;border:2px solid #6F8E8C;background:var(--ink-raised);font-size:16px;font-weight:700;white-space:nowrap}
+.prange{font-size:15px;color:var(--muted-ink);white-space:nowrap}
+.prange b{color:#FFFFFF}
+.ringrow{display:flex;align-items:center;gap:14px}
+.ring{position:relative;width:84px;height:84px;flex:none}
+.ring b{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:22px;line-height:1;color:var(--teal);font-weight:800}
+.ring b small{font-size:13px;font-weight:400;color:var(--m-muted);margin-top:2px}
+.vh2{font-size:16px;font-weight:700;margin-bottom:2px}
+.vh2.q{color:var(--m-muted);margin-top:12px}
+.vh2.q span{font-weight:400;font-size:14px}
+.vr{display:flex;align-items:center;gap:10px;border-bottom:1px solid #DDE6E4;padding:7px 0;min-height:40px;font-size:15px}
+.vr span{flex:1}
+.vr b{font-size:18px;letter-spacing:-0.01em}
+.vr.q{color:var(--m-muted)}
+.vprob{display:flex;align-items:center;gap:10px;padding:10px 0 2px;font-size:15px;font-weight:700;color:var(--warn-dark)}
+/* PDF page 1 (verifier PDF, sample) */
+.paper{--pz:.6;flex:none;width:calc(460px * var(--pz));height:calc(560px * var(--pz));overflow:hidden;position:relative;border-radius:6px 6px 0 0;background:#FFFFFF;border:1px solid #C9D6D3;border-bottom:0}
+@media (min-width:390px){.paper{--pz:.66}}
+@media (min-width:420px){.paper{--pz:.7}}
+@media (min-width:760px){.paper{--pz:.7}}
+@media (min-width:980px){.paper{--pz:1}}
+.pdf{zoom:var(--pz);width:460px;padding:26px 30px;font-size:11px;line-height:1.35;color:#111111}
+.pdf .ph{display:flex;justify-content:space-between;gap:12px;font-size:9.5px;color:#555555;padding-bottom:14px}
+.pdf .ph em{font-style:normal;font-weight:700;color:var(--teal-dark);border:1.5px solid currentColor;border-radius:9999px;padding:0 6px}
+.pdf h4{margin:0 0 8px;font-size:20px;font-weight:700;letter-spacing:-0.01em}
+.pdf .meta p{margin:0}
+.pdf table{width:100%;border-collapse:collapse;margin:12px 0 10px;font-size:10.5px}
+.pdf th{text-align:left;font-weight:700;border-bottom:1.5px solid #111111;padding:3px 4px 3px 0}
+.pdf td{border-bottom:1px solid #DDDDDD;padding:3px 4px 3px 0}
+.pdf td.nc,.pdf th.nc{text-align:right;padding:3px 0 3px 10px;width:60px}
+.pdf .sum p{margin:0;font-weight:700}
+.pdf h5{margin:12px 0 4px;font-size:12px;font-weight:700}
+.pdf ol{list-style:none;margin:0;padding:0}
+.pdf ol li{display:flex;justify-content:space-between;gap:8px;padding:1px 0 1px 10px}
+
+/* paper problem */
+.pains{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:36px;padding:0;list-style:none}
+.pains li{display:flex;align-items:center;gap:16px;padding:18px 20px;border-radius:28px;background:var(--surface);font-weight:700;font-size:18px;line-height:1.3}
+.pains .x{flex:none;width:48px;height:48px;border-radius:9999px;background:var(--warn-tint);display:flex;align-items:center;justify-content:center}
+.turn{margin-top:28px;display:flex;align-items:center;gap:10px;font-weight:800;font-size:clamp(22px,3vw,30px);letter-spacing:-0.02em}
+
+/* how it works */
+.how{display:grid;gap:48px;align-items:center}
+@media (min-width:980px){.how{grid-template-columns:minmax(0,1fr) auto;gap:80px}}
+.steps{list-style:none;padding:0;margin:32px 0 0;display:flex;flex-direction:column;gap:14px}
+.steps li{display:flex;gap:18px;align-items:flex-start;padding:22px;border-radius:28px;background:var(--surface)}
+.step-n{flex:none;width:52px;height:52px;border-radius:9999px;background:var(--ink);color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:24px}
+.steps h3{font-size:22px;font-weight:800;letter-spacing:-0.02em;line-height:1.15}
+.steps p{margin-top:4px;color:var(--muted);font-size:17px}
+.how figure{display:flex;flex-direction:column;align-items:center}
+
+/* record grid */
+.grey{background:var(--surface)}
+.tiles{list-style:none;padding:0;margin:36px 0 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.tiles li{display:flex;flex-direction:column;gap:12px;padding:22px;border-radius:28px;background:#FFFFFF}
+.tiles .ti{width:56px;height:56px;border-radius:9999px;background:var(--wash);display:flex;align-items:center;justify-content:center}
+.tiles h3{font-size:21px;font-weight:800;letter-spacing:-0.02em;line-height:1.15;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.tiles p{font-size:16px;color:var(--muted);line-height:1.4}
+@media (max-width:599px){.tiles li{display:grid;grid-template-columns:auto 1fr;align-items:center;padding:14px 16px;column-gap:14px;row-gap:2px}.tiles .ti{grid-row:span 2;align-self:center}.tiles .ti{flex:none;width:48px;height:48px}.tiles h3{font-size:19px}.tiles p{font-size:15px;margin-top:2px}}
+.tiles .soon{background:transparent;border:2px dashed var(--line)}
+.tiles .soon .ti{background:#FFFFFF}
+.tag-soon{font-size:13px;font-weight:700;padding:3px 10px;border-radius:9999px;background:var(--ink);color:#FFFFFF;letter-spacing:0}
+.tag-opt{font-size:13px;font-weight:700;padding:1px 8px;border-radius:9999px;border:1.5px solid var(--muted);color:var(--muted)}
+
+/* what's due */
+.dueg{display:grid;gap:48px;align-items:center}
+@media (min-width:980px){.dueg{grid-template-columns:auto minmax(0,1fr);gap:96px}}
+.dueg figure{display:flex;flex-direction:column;align-items:center;order:2}
+@media (min-width:980px){.dueg figure{order:0}}
+.dlist{list-style:none;padding:0;margin:32px 0 0;display:flex;flex-direction:column;gap:10px}
+.dlist li{display:flex;align-items:center;gap:16px;min-height:72px;padding:12px 22px 12px 12px;border-radius:9999px;background:var(--ink-raised)}
+.dlist .di{flex:none;width:52px;height:52px;border-radius:9999px;background:var(--ink);display:flex;align-items:center;justify-content:center}
+.dlist b{display:block;font-size:19px;letter-spacing:-0.01em}
+.dlist span{display:block;font-size:15px;color:var(--muted-ink)}
+.ink .sub2{color:var(--muted-ink)}
+
+/* safekeeping */
+.keep{display:grid;gap:12px;margin-top:36px}
+@media (min-width:860px){.keep{grid-template-columns:1.2fr 1fr 1fr}}
+.keep .big4{grid-row:span 2;display:flex;flex-direction:column;justify-content:space-between;gap:24px;padding:28px;border-radius:28px;background:var(--wash);color:var(--ink)}
+.keep .big4 .yrs{font-weight:900;font-size:clamp(96px,14vw,168px);line-height:.8;letter-spacing:-0.06em;color:var(--teal)}
+.keep .big4 .yrs small{display:block;font-size:.26em;letter-spacing:-0.02em;text-transform:uppercase;margin-top:12px;color:var(--teal-dark)}
+.keep .k{display:flex;flex-direction:column;gap:12px;padding:24px;border-radius:28px;background:var(--surface)}
+.keep .k .ti{width:52px;height:52px;border-radius:9999px;background:#FFFFFF;display:flex;align-items:center;justify-content:center}
+.keep h3{font-size:21px;font-weight:800;letter-spacing:-0.02em;line-height:1.15}
+@media (max-width:859px){.keep .k{display:grid;grid-template-columns:auto 1fr;column-gap:16px;row-gap:2px;padding:18px 20px}.keep .k .ti{grid-row:span 2}.keep .big4{flex-direction:row;align-items:center;padding:24px}.keep .big4 .yrs{font-size:96px}}
+.keep p{font-size:16px;color:var(--muted);line-height:1.4}
+.keep .big4 p{color:var(--ink);font-size:18px}
+
+/* call to action */
+.cta{background:var(--teal);color:#FFFFFF}
+.cta .inner{display:flex;flex-direction:column;gap:22px;align-items:flex-start}
+.cta p{max-width:620px}
+/* text links */
+.tlink{display:inline-flex;align-items:center;min-height:48px;padding:0 2px;color:#FFFFFF;font-weight:600;font-size:17px;text-decoration:underline;text-underline-offset:4px}
+.tlink:hover{color:var(--mint)}
+.hero .tlink{color:var(--muted-ink)}
+.hero .tlink:hover{color:#FFFFFF}
+.hero .btns{align-items:center;gap:12px 24px}
+.cta .tlink:hover{color:var(--wash)}
+.cta .more{display:flex;flex-direction:column;gap:6px;margin-top:-8px}
+.cta .ask{font-size:16px}
+.cta .ask a{display:inline-block;padding:12px 2px;margin:-12px -2px;color:#FFFFFF;font-weight:700}
+.cta .ask a:hover{color:var(--wash)}
+
+/* footer */
+footer{background:var(--ink);color:var(--muted-ink);font-size:15px}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px 40px;padding-top:40px;padding-bottom:48px}
+.foot .brand{font-size:20px}
+.foot ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:0 8px}
+.foot ul a{display:inline-flex;align-items:center;min-height:48px;padding:0 10px;color:#FFFFFF;font-weight:600}
+.foot ul a:hover{color:var(--mint)}
+.foot .fine{flex-basis:100%;border-top:1px solid var(--ink-raised);padding-top:20px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px}
+/* Variant: 3 cards in one row on wide screens; card 3 overlaps the PDF page on the phone */
+@media (min-width:1100px){
+  .pcards{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .pc{padding:40px 28px 44px}
+  .pc h3{font-size:clamp(30px,2.5vw,36px)}
+  .pc .phone{--z:.7}
+  .pc3{grid-column:auto;grid-template-columns:minmax(0,1fr);grid-template-rows:auto 1fr;row-gap:28px;padding:40px 28px 0}
+  .pc3 .pc-copy{grid-column:1;grid-row:1}
+  .pc3 .pc-vis{grid-column:1;grid-row:2;justify-content:flex-start;align-items:flex-start;padding-bottom:44px}
+  .pc3 .pc-paper{grid-column:1;grid-row:2;justify-content:flex-end;align-items:flex-end;position:relative;z-index:3;pointer-events:none}
+  .pc3 .phone{--z:.6}
+  .pc3 .paper{--pz:.5;border:2px solid var(--line);border-bottom:0}
+}
+@media (min-width:1280px){.pc .phone{--z:.76}.pc3 .phone{--z:.62}.pc3 .paper{--pz:.54}}
+/* Variant A: centred hero, no hero phone; the cards straddle the bottom edge of the dark band */
+.hero{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center;padding-top:40px}
+.hero-copy{align-items:center;padding-bottom:56px}
+.hero .sub,.for{margin-left:auto;margin-right:auto}
+.hero .btns{justify-content:center}
+@media (min-width:980px){.hero{grid-template-columns:minmax(0,1fr);padding-top:64px}.hero-copy{padding-bottom:72px}}
+header.ink{padding-bottom:140px}
+.pcards{position:relative;margin-top:-140px}
+@media (min-width:760px){header.ink{padding-bottom:300px}.pcards{margin-top:-300px}}
+@media (min-width:1100px){header.ink{padding-bottom:380px}.pcards{margin-top:-380px}}
+/* card 2 sits on the dark band, so it uses teal instead of the band colour */
+.pc2{background:var(--teal)}
+.pc2 .pc-copy p{color:#FFFFFF}
+.pc2 .phone{border-color:var(--ink)}
+
+/* Hero try-it card: a working copy of the fridge check (prototype Fridge.dc.html). Kitchen ink tokens only. */
+.hero{gap:28px}
+.hero-copy{padding-bottom:0}
+@media (min-width:980px){.hero-copy{padding-bottom:0}}
+.try{width:100%;max-width:420px;margin:0 auto}
+.tc{background:var(--m-bg);color:var(--ink);border-radius:28px;padding:12px;display:flex;flex-direction:column;gap:12px;text-align:left;font-size:16px;line-height:1.3}
+.tc :focus-visible{outline-color:var(--teal)}
+.tc-top{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;background:var(--m-card);border:1px solid var(--m-edge);box-shadow:var(--m-shadow);border-radius:20px;padding:12px 14px 14px 12px}
+.tc-top .cs{gap:8px}
+.tc-sample{margin:2px 8px -4px;font-size:13px;font-weight:600;color:var(--m-muted)}
+#try-count{white-space:nowrap}
+.tdots{display:inline-flex;gap:4px}
+.tdots i{width:12px;height:12px;border-radius:6px;border:2px solid var(--teal)}
+.tdots i.on{background:var(--teal)}
+.tbar{flex-basis:100%;height:8px;border-radius:9999px;background:var(--m-bg);overflow:hidden}
+.tbar span{display:block;height:100%;width:66.67%;background:var(--teal);border-radius:inherit}
+.tdock{background:var(--m-card);border:1px solid var(--m-edge);box-shadow:var(--m-shadow);border-radius:20px;padding:14px 14px 16px;display:flex;flex-direction:column;gap:10px}
+.tdock>label.ct{display:block}
+/* sign slot inside the field (design-system 13, as SignedTempField): + for fridges, tap toggles to − */
+.tfield{display:flex;align-items:center;gap:4px;height:64px;border:2px solid var(--m-line-input);border-radius:16px;background:#FFFFFF;padding:0 14px 0 6px}
+.tfield:focus-within{border-color:var(--teal);outline:3px solid var(--teal);outline-offset:1px}
+.tfield.bad{border-color:var(--warn)}
+.tfield.bad:focus-within{outline-color:var(--warn)}
+.tsign{flex:none;width:48px;height:48px;margin:0;border-radius:12px;border:1.5px solid var(--m-line-input);background:var(--m-icon);color:var(--ink);display:flex;align-items:center;justify-content:center;padding:0 0 3px;font:inherit;font-size:30px;line-height:1;font-weight:800;cursor:pointer;touch-action:manipulation}
+.tsign:hover{background:var(--wash)}
+.tin{flex:1;min-width:0;width:100%;height:100%;margin:0;padding:0 0 0 10px;border:0;border-radius:0;outline:0;background:transparent;color:var(--ink);text-align:left;font:inherit;font-size:32px;font-weight:800;letter-spacing:-0.02em}
+.tin::placeholder{color:#A3B5B2}
+.tin:focus-visible{outline:0}
+.trb{font-size:15px;font-weight:700}
+.trb:empty{display:none}
+.tgauge{padding-top:6px}
+.tgauge .five{margin-top:4px}
+.tgauge .mark[hidden]{display:none}
+.tstat{padding:10px 14px;border-radius:28px;font-weight:700;font-size:16px}
+.tstat.ok{background:var(--wash);color:var(--teal-dark)}
+.tstat.bad{background:var(--warn-tint);color:var(--warn-dark)}
+.tstat.none{background:var(--quiet);color:var(--m-muted)}
+.tact{display:flex;flex-direction:column;gap:6px}
+.tact[hidden]{display:none}
+.tact label{font-weight:700;font-size:15px}
+.tact textarea{width:100%;min-height:72px;margin:0;padding:10px 12px;border:2px solid var(--m-line-input);border-radius:16px;background:#FFFFFF;color:var(--ink);font:inherit;font-size:16px;resize:vertical}
+.tact textarea:focus{border-color:var(--teal)}
+.terr{padding:0 6px;font-size:15px;font-weight:700;color:var(--warn-dark)}
+.terr:empty{display:none}
+.tsave{min-height:56px;padding:0 20px;border-radius:9999px;border:2px solid var(--teal);background:var(--teal);color:#FFFFFF;font:inherit;font-weight:700;font-size:17px;cursor:pointer;touch-action:manipulation}
+.tsave:hover{background:var(--teal-dark);border-color:var(--teal-dark)}
+.tsave.done{background:var(--wash);color:var(--teal-dark);border-color:var(--teal)}
+@media (prefers-reduced-motion:no-preference){
+  .tbar span{transition:width .35s ease-out}
+  .tgauge .mark{transition:left .2s ease-out}
+  .tdots i{transition:background-color .2s}
+}
+.try figcaption{margin-top:12px;font-size:15px}
+.hero-more{display:flex;flex-direction:column;align-items:center;gap:8px;padding-bottom:56px}
+@media (min-width:980px){
+  .hero{grid-template-columns:minmax(0,1fr) 420px;grid-template-areas:"copy try" "more try";grid-template-rows:auto 1fr;column-gap:64px;row-gap:24px;justify-items:stretch;align-items:start;text-align:left;padding-top:64px}
+  .hero-copy{grid-area:copy;align-items:flex-start}
+  .hero .sub,.for{margin-left:0;margin-right:0}
+  .hero .btns{justify-content:flex-start}
+  .try{grid-area:try;margin:0}
+  .hero-more{grid-area:more;align-items:flex-start;padding-bottom:72px}
+  h1.display{font-size:clamp(64px,7.4vw,100px)}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Line icons from the prototype: 24 px grid, 2 px stroke, round ends (design-system.md section 8) -->
+    <symbol id="i-fridge" viewBox="0 0 24 24"><path d="M7 2.5h10a2 2 0 012 2v15a2 2 0 01-2 2H7a2 2 0 01-2-2v-15a2 2 0 012-2zM5 9.5h14M8.5 5.5v1.5M8.5 12.5v3"/></symbol>
+    <symbol id="i-cooking" viewBox="0 0 24 24"><path d="M5 10.5h14v6.5a3 3 0 01-3 3H8a3 3 0 01-3-3zM3 10.5h18M10 7.5h4M2.5 13h2.5M19 13h2.5M9 3.5v1.5M12 3v2M15 3.5v1.5"/></symbol>
+    <symbol id="i-cooling" viewBox="0 0 24 24"><path d="M8 14.5V5a2 2 0 014 0v9.5a3.5 3.5 0 11-4 0zM10 9.5v7M18 4v11M15.5 12.5L18 15l2.5-2.5"/></symbol>
+    <symbol id="i-delivery" viewBox="0 0 24 24"><path d="M2 5.5h11v10H2zM13 8.5h4.2l3.3 3.5v3.5H13M4.5 17.5a2 2 0 104 0a2 2 0 10-4 0M14.5 17.5a2 2 0 104 0a2 2 0 10-4 0"/></symbol>
+    <symbol id="i-hothold" viewBox="0 0 24 24"><path d="M3 13h18M5 13v4.5a2 2 0 002 2h10a2 2 0 002-2V13M8 4.5c-1 1.2 1 2.3 0 3.5M12 4.5c-1 1.2 1 2.3 0 3.5M16 4.5c-1 1.2 1 2.3 0 3.5"/></symbol>
+    <symbol id="i-problem" viewBox="0 0 24 24"><path d="M10.3 3.9L2.4 18a2 2 0 001.7 3h15.8a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0zM12 9v4.5M12 17v.5"/></symbol>
+    <symbol id="i-training" viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5zM6 11v5c0 1.6 2.7 3 6 3s6-1.4 6-3v-5M22 9v5"/></symbol>
+    <symbol id="i-registration" viewBox="0 0 24 24"><path d="M6 2.5h8.5L19 7v14.5H6zM14.5 2.5V7H19M9 12h7M9 16h5"/></symbol>
+    <symbol id="i-recall" viewBox="0 0 24 24"><path d="M3.5 8L12 3.5 20.5 8v8L12 20.5 3.5 16zM3.5 8L12 12.5 20.5 8M12 12.5v8"/></symbol>
+    <symbol id="i-verify" viewBox="0 0 24 24"><path d="M10.5 18a7.5 7.5 0 110-15 7.5 7.5 0 010 15zM16 16l5 5M7.5 10.5l2 2 4-4"/></symbol>
+    <symbol id="i-thermo" viewBox="0 0 24 24"><path d="M10 14.5V5a2 2 0 014 0v9.5a3.5 3.5 0 11-4 0zM12 9.5v7"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><path d="M5.5 5h13a2 2 0 012 2v11.5a2 2 0 01-2 2h-13a2 2 0 01-2-2V7a2 2 0 012-2zM3.5 10h17M8 3v4M16 3v4"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 0112 0v5l1.5 2h-15zM10 20.5a2 2 0 004 0"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><path d="M12 21a9 9 0 100-18 9 9 0 000 18zM12 7v5l3 2"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol>
+    <symbol id="i-team" viewBox="0 0 24 24"><path d="M9 11a3.5 3.5 0 100-7 3.5 3.5 0 000 7zM2.5 20a6.5 6.5 0 0113 0M16 4.3a3.5 3.5 0 010 6.4M18 13.5a6.5 6.5 0 013.5 6"/></symbol>
+    <symbol id="i-today" viewBox="0 0 24 24"><path d="M4 6l1.5 1.5L8 5M4 12l1.5 1.5L8 11M4 18l1.5 1.5L8 17M11 6.5h9M11 12.5h9M11 18.5h9"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><path d="M6 11h12v10H6zM8.5 11V7.5a3.5 3.5 0 017 0V11"/></symbol>
+    <symbol id="i-history" viewBox="0 0 24 24"><path d="M4 12a8 8 0 102.4-5.7M4 3.5v4.5h4.5M12 8v4l2.5 2"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></symbol>
+    <symbol id="i-chev-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><path d="M3.5 5.5h17v13h-17zM3.5 6l8.5 7 8.5-7"/></symbol>
+    <symbol id="i-wifioff" viewBox="0 0 24 24"><path d="M3 3l18 18M8.5 16.5a5 5 0 017 0M5 12.5a10 10 0 015-2.6M14.5 10a10 10 0 014.5 2.5M2 8.8a15 15 0 014.5-2.9M11 5a15 15 0 0111 3.8M12 20h.01"/></symbol>
+    <symbol id="i-devices" viewBox="0 0 24 24"><path d="M3 5h13v9H3zM1.5 17h16M18 9h4v11h-4zM20 17.5h.01"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3.5v5c0 5-3.5 8.3-8 9.5-4.5-1.2-8-4.5-8-9.5v-5zM8.5 12l2.5 2.5 4.5-5"/></symbol>
+    <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 00-4-4L4 16zM13.5 6.5l4 4"/></symbol>
+    <symbol id="i-wet" viewBox="0 0 24 24"><path d="M12 3s6 6.5 6 11a6 6 0 01-12 0c0-4.5 6-11 6-11z"/></symbol>
+    <symbol id="i-paper" viewBox="0 0 24 24"><path d="M6 2.5h8.5L19 7v14.5H6zM14.5 2.5V7H19M9 12h7M9 16h5"/></symbol>
+    <symbol id="i-clean" viewBox="0 0 24 24"><path d="M11 3l1.9 4.6L17.5 9.5l-4.6 1.9L11 16l-1.9-4.6L4.5 9.5l4.6-1.9zM18 14.5l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z"/></symbol>
+    <symbol id="i-service" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 00-5.4 5.2L3.5 17.3a1.8 1.8 0 002.5 2.5l5.8-5.8a4 4 0 005.2-5.4l-2.6 2.6-2.3-.4-.4-2.3z"/></symbol>
+    <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 4v15M7 19.5h10M5 7.5h14M5 7.5l-2.5 6a2.5 2.5 0 005 0zM19 7.5l-2.5 6a2.5 2.5 0 005 0z"/></symbol>
+    <symbol id="i-person" viewBox="0 0 24 24"><path d="M12 12a4 4 0 100-8 4 4 0 000 8zM4.5 21a7.5 7.5 0 0115 0"/></symbol>
+  </defs>
+</svg>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="ink">
+  <div class="wrap top">
+    <a class="brand" href="#top" aria-label="SousMate, back to top">
+      <img src="icon.svg" alt="" width="40" height="40">
+      <span>Sous<span class="mint">Mate</span></span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a class="link" href="#how">How it works</a>
+      <a class="link" href="#records">Records</a>
+      <a class="link" href="#due">What's due</a>
+      <a class="link signin" href="https://app.sousmate.co.nz/#setup/signin">Sign in</a>
+      <a class="btn btn-mint" href="https://demo.sousmate.co.nz/">Free demo</a>
+    </nav>
+  </div>
+
+  <div class="wrap hero" id="top">
+    <div class="hero-copy">
+      <h1 class="display">Less paperwork.<br><span class="mint">More cooking.</span></h1>
+      <p class="lead sub">Food Act records on your phone. SousMate tells you what's due.</p>
+      <div class="btns">
+        <a class="btn btn-mint" href="https://demo.sousmate.co.nz/">Try the free demo
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+
+    <!-- Try-it card: a working copy of the fridge check (prototype Fridge.dc.html, src/features/fridge-round), with the
+         sign slot inside the field (ui-tidy-a A5: fridges start on "+", a tap toggles the sign, focus stays in the number).
+         Limit from templates/nz/fridge-temp.json: limits.maxC 5.0, inclusive (MPI SS&S template FCP S39-00006,
+         p.42-43: "Check daily that the food in your fridge is being kept at 5C or lower"). Input range -30..50 and
+         1 decimal are the same app sanity check (input, not MPI). Not a form: it saves and sends nothing. -->
+    <figure class="try">
+      <div class="tc" role="group" aria-labelledby="try-h">
+        <p class="tc-sample">Prototype with sample data</p>
+        <div class="tc-top">
+          <span class="ico"><svg width="24" height="24" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-fridge"/></svg></span>
+          <div class="grow">
+            <p class="ct" id="try-h">Fridges</p>
+            <p class="cs"><span class="tdots" aria-hidden="true"><i class="on"></i><i class="on"></i><i id="try-dot3"></i></span><span id="try-count" aria-live="polite">2 of 3 checked</span></p>
+          </div>
+          <div class="tbar" aria-hidden="true"><span id="try-bar"></span></div>
+        </div>
+        <div class="tdock" id="try-dock">
+          <label class="ct" for="try-temp" id="try-name">Fridge 1</label>
+          <div class="tfield" id="try-field">
+            <button type="button" class="tsign" id="try-sign" aria-label="Change to minus" aria-describedby="try-name">+</button>
+            <input class="tin" id="try-temp" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="0.0" value="3.5" aria-describedby="try-rb try-status">
+            <span class="deg" aria-hidden="true">°C</span>
+          </div>
+          <p class="trb" id="try-rb" role="status">Reading: 3.5°C</p>
+          <div class="tgauge" aria-hidden="true">
+            <div class="track"><span class="safe"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><use href="#i-check"/></svg>Safe</span><span class="tw">! Too warm</span><span class="mark" id="try-mark"></span></div>
+            <p class="five">5°C</p>
+          </div>
+          <p class="tstat ok" id="try-status" role="status">✓ OK — 5°C or lower</p>
+          <div class="tact" id="try-act" hidden>
+            <label for="try-what">What did you do about Fridge 1? (required)</label>
+            <textarea id="try-what" rows="2"></textarea>
+          </div>
+        </div>
+        <p class="terr" id="try-err" role="alert"></p>
+        <button type="button" class="tsave" id="try-save">Save 1 reading</button>
+      </div>
+      <figcaption>Works like the fridge check in the app. Try a temperature. Nothing is saved.</figcaption>
+    </figure>
+
+    <div class="hero-more">
+      <p class="for">For New Zealand cafés, bakeries, food trucks, fish &amp; chip shops and home kitchens on the MPI Simply Safe &amp; Suitable template or National Programme 2.</p>
+    </div>
+
+  </div>
+</header>
+
+<main id="main">
+
+  <section id="product" aria-labelledby="product-h">
+    <h2 class="vh" id="product-h">What SousMate does</h2>
+    <div class="wrap pcards">
+
+      <article class="pc pc1" aria-labelledby="pc1-h">
+        <div class="pc-copy">
+          <h3 id="pc1-h">Know what's due</h3>
+          <p>See what's left to check today, and what's coming up: your verification visit, staff training, recall test and the equipment checks on your own schedule.</p>
+        </div>
+        <figure class="pc-vis">
+          <div class="phone" role="img" aria-label="The What's due tab for Sample Café with sample dates, each with a countdown bar: registration ends in 28 days, coming up, registered 21 Nov 2025, ends 21 Nov 2026; mock recall in 130 days, all good, last test 3 Mar 2026, due 3 Mar 2027; next verification in 142 days, all good, last visit 14 Mar 2026, next 15 Mar 2027. The bottom bar shows Today, What's due, History and Team, with What's due selected.">
+            <div class="screen" aria-hidden="true">
+              <div class="hd">
+                <p class="hd-proto">Prototype with sample data</p>
+                <div class="hd-top"><div class="hd-lines"><p class="hd-shop">Sample Café</p><p class="hd-date">Saturday 24 October</p></div></div>
+                <p class="hd-title">What's due</p>
+              </div>
+              <div class="sb" style="padding-top:18px">
+                <p class="h2s" style="margin-top:0">Dates</p>
+                <div class="due">
+                  <div class="row"><span class="ico"><svg width="26" height="26" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-registration"/></svg></span><div class="dtl"><p class="ct">Registration ends</p><span class="tag up">Coming up</span></div><span class="why">Why?</span></div>
+                  <p class="numrow"><span class="num">28</span><span>days left · renew</span></p>
+                  <div class="cd"><div class="cd-track"><i style="width:92%;background:#0B6B72"></i></div><p class="cd-lbl"><span>Registered <b>21 Nov 2025</b></span><span>Ends <b>21 Nov 2026</b></span></p></div>
+                </div>
+                <div class="due">
+                  <div class="row"><span class="ico"><svg width="26" height="26" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-recall"/></svg></span><div class="dtl"><p class="ct">Mock recall</p><span class="tag good">✓ All good</span></div><span class="why">Why?</span></div>
+                  <p class="numrow"><span class="num">130</span><span>days to go</span></p>
+                  <div class="cd"><div class="cd-track"><i style="width:64%;background:#08555B"></i></div><p class="cd-lbl"><span>Last test <b>3 Mar 2026</b></span><span>Due <b>3 Mar 2027</b></span></p></div>
+                </div>
+                <div class="due">
+                  <div class="row"><span class="ico"><svg width="26" height="26" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-verify"/></svg></span><div class="dtl"><p class="ct">Next verification</p><span class="tag good">✓ All good</span></div><span class="why">Why?</span></div>
+                  <p class="numrow"><span class="num">142</span><span>days to go</span></p>
+                  <div class="cd"><div class="cd-track"><i style="width:61%;background:#08555B"></i></div><p class="cd-lbl"><span>Last visit <b>14 Mar 2026</b></span><span>Next <b>15 Mar 2027</b></span></p></div>
+                </div>
+              </div>
+              <div class="sdock">
+                <div class="snav"><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-today"/></svg>Today</span><span class="on"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-calendar"/></svg>What's due</span><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-history"/></svg>History</span><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-team"/></svg>Team</span></div>
+              </div>
+            </div>
+          </div>
+        </figure>
+      </article>
+
+      <article class="pc pc2" aria-labelledby="pc2-h">
+        <div class="pc-copy">
+          <h3 id="pc2-h">Record as you go</h3>
+          <p>Walk round once. Every fridge and freezer is on one screen. Type the fridge °C or tap Still frozen ✓, then save once. Each reading keeps who checked it and when.</p>
+        </div>
+        <figure class="pc-vis">
+          <div class="phone" role="img" aria-label="The fridge round screen with sample data, scrolled down: Fridges, chillers and freezers, safe at 5°C or colder. Checked today: Walk-in chiller, Mia at 07:12, 3.4°, OK. To check: Ice-cream freezer, with the help line Saved as measured, SousMate does not judge a freezer temperature. Its optional Food temperature field is empty with the minus sign, then the filled button Still frozen, then the outline button Not frozen or freezer fault. The Save button waits: Enter a temperature.">
+            <div class="screen round" aria-hidden="true">
+              <div class="hd">
+                <div class="sub-top"><span class="back"><svg width="20" height="20" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-back"/></svg>Today</span><span class="hd-proto">Prototype with sample data</span></div>
+                <p class="sub-title">Fridges, chillers and freezers</p>
+                <div class="rule"><b><svg width="20" height="20" fill="none" stroke="#8EE6C9" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-thermo"/></svg>Safe: 5°C or colder</b><u>How to check</u></div>
+              </div>
+              <div class="sb">
+                <p class="h2s" style="margin-top:4px">Checked today</p>
+                <div class="chk"><div class="grow"><p class="ct">Walk-in chiller</p><p class="cs" style="font-size:14px">Mia · 07:12</p></div><p class="t">3.4°</p><span class="okp">✓ OK</span></div>
+                <p class="h2s" style="margin-top:4px">To check</p>
+                <p class="hint">Saved as measured. SousMate does not judge a freezer temperature.</p>
+                <div class="fcard">
+                  <p class="fzname">Ice-cream freezer</p>
+                  <p class="flbl">Food temperature (optional)</p>
+                  <div class="sfield small" style="margin-top:-4px"><span class="sign">−</span><span class="sv ph">0.0</span><span class="deg">°C</span></div>
+                  <div class="fz"><span class="mk"></span>Still frozen ✓</div>
+                  <div class="btn2">Not frozen or freezer fault</div>
+                </div>
+              </div>
+              <div class="sdock">
+                <div class="save off">Enter a temperature</div>
+                <div class="snav"><span class="on"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-today"/></svg>Today</span><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-calendar"/></svg>What's due</span><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-history"/></svg>History</span><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-team"/></svg>Team</span></div>
+              </div>
+            </div>
+          </div>
+        </figure>
+      </article>
+
+      <article class="pc pc3" aria-labelledby="pc3-h">
+        <div class="pc-copy">
+          <h3 id="pc3-h">Ready for your verifier</h3>
+          <p>Open Inspection day and hand over one PDF. Page 1 sums up every record type, the days a fridge wasn't checked and any problems, with page numbers for the rest.</p>
+        </div>
+        <figure class="pc-vis">
+          <div class="phone" role="img" aria-label="The History tab on Inspection day, with sample data. Period: Since last visit, 14 Mar, so 14 Mar to 24 Oct 2026. Every fridge check done on 216 of 225 days. Required records: fridge checks 666, poultry, mince, liver 268, cooling batches 38, deliveries 97, training records 2. 3 problems, each with what was done. Optional records kept: other cooking 144, hot holding 305.">
+            <div class="screen" aria-hidden="true">
+              <div class="hd">
+                <p class="hd-proto">Prototype with sample data</p>
+                <div class="hd-top"><div class="hd-lines"><p class="hd-shop">Sample Café</p><p class="hd-date">Saturday 24 October</p></div></div>
+                <p class="hd-title">History</p>
+              </div>
+              <div class="sb" style="padding-top:18px">
+                <p class="h2s" style="margin-top:0">Inspection day</p>
+                <div class="pbox">
+                  <span class="psel">Since last visit · 14 Mar<svg width="20" height="20" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chev-down"/></svg></span>
+                  <p class="prange"><b>14 Mar</b> – <b>24 Oct 2026</b></p>
+                </div>
+                <div class="vcard ringrow">
+                  <div class="ring">
+                    <svg width="84" height="84" viewBox="0 0 92 92"><circle cx="46" cy="46" r="39" fill="none" stroke="#E7EEEC" stroke-width="10"/><circle cx="46" cy="46" r="39" fill="none" stroke="#0B6B72" stroke-width="10" stroke-dasharray="235.2 245.0" transform="rotate(-90 46 46)"/></svg>
+                    <b>216<small>of 225</small></b>
+                  </div>
+                  <div><p style="font-size:17px;font-weight:700;line-height:1.25">Days with every fridge check done</p><p style="margin-top:4px;font-size:15px;color:#43585A">216 of 225 days</p></div>
+                </div>
+                <div class="vcard">
+                  <p class="vh2">Required records</p>
+                  <div class="vr"><svg width="22" height="22" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-fridge"/></svg><span>Fridge checks</span><b>666</b></div>
+                  <div class="vr"><svg width="22" height="22" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-cooking"/></svg><span>Poultry, mince, liver</span><b>268</b></div>
+                  <div class="vr"><svg width="22" height="22" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-cooling"/></svg><span>Cooling batches</span><b>38</b></div>
+                  <div class="vr"><svg width="22" height="22" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-delivery"/></svg><span>Deliveries</span><b>97</b></div>
+                  <div class="vr"><svg width="22" height="22" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-training"/></svg><span>Training records</span><b>2</b></div>
+                  <div class="vprob"><svg width="22" height="22" fill="none" stroke="#7E3209" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-problem"/></svg>3 problems, each with what was done</div>
+                  <p class="vh2 q">Optional records kept <span>· extra evidence</span></p>
+                  <div class="vr q"><svg width="22" height="22" fill="none" stroke="#43585A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-cooking"/></svg><span>Other cooking</span><b>144</b></div>
+                  <div class="vr q"><svg width="22" height="22" fill="none" stroke="#43585A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-hothold"/></svg><span>Hot holding</span><b>305</b></div>
+                </div>
+              </div>
+              <div class="sdock">
+                <div class="snav"><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-today"/></svg>Today</span><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-calendar"/></svg>What's due</span><span class="on"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-history"/></svg>History</span><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-team"/></svg>Team</span></div>
+              </div>
+            </div>
+          </div>
+        </figure>
+        <figure class="pc-paper">
+          <div class="paper" role="img" aria-label="Page 1 of the verifier PDF, with sample data: the business, plan and period, a table of every record type showing if MPI requires it with records and problems, the days a fridge was not checked, the problems count with its page, and the contents with page numbers.">
+            <div class="pdf" aria-hidden="true">
+              <div class="ph"><span>Sample Café · Food safety records 14 Mar 2026 to 24 Oct 2026</span><em>Sample</em></div>
+              <h4>Food safety records</h4>
+              <div class="meta">
+                <p>Business: Sample Café</p>
+                <p>Simply Safe &amp; Suitable template food control plan</p>
+                <p>Registered with Auckland Council</p>
+                <p>Period: 14 Mar 2026 to 24 Oct 2026 (225 days)</p>
+                <p>Last verification visit: 14 Mar 2026</p>
+              </div>
+              <table>
+                <thead><tr><th>Record</th><th>Required by MPI</th><th class="nc">Records</th><th class="nc">Problems</th></tr></thead>
+                <tbody>
+                  <tr><td>Fridge checks</td><td>Required</td><td class="nc">666</td><td class="nc">2</td></tr>
+                  <tr><td>Poultry, mince, liver</td><td>Required</td><td class="nc">268</td><td class="nc">0</td></tr>
+                  <tr><td>Cooling batches</td><td>Required</td><td class="nc">38</td><td class="nc">1</td></tr>
+                  <tr><td>Deliveries</td><td>Required</td><td class="nc">97</td><td class="nc">0</td></tr>
+                  <tr><td>Training records</td><td>Required</td><td class="nc">2</td><td class="nc">--</td></tr>
+                  <tr><td>Other cooking</td><td>Optional</td><td class="nc">144</td><td class="nc">--</td></tr>
+                  <tr><td>Hot holding</td><td>Optional</td><td class="nc">305</td><td class="nc">0</td></tr>
+                  <tr><td>Freezer checks</td><td>Business rule (not MPI)</td><td class="nc">221</td><td class="nc">0</td></tr>
+                </tbody>
+              </table>
+              <div class="sum">
+                <p>Days with every fridge check done: 216 of 225</p>
+                <p>Days with a fridge not checked: 29 Mar, 19 Apr, 3 May, 7 Jun, 5 Jul, 9 Aug, 30 Aug, 20 Sep, 4 Oct</p>
+                <p>Problems: 3, see page 2</p>
+              </div>
+              <h5>Contents</h5>
+              <ol>
+                <li><span>When something went wrong</span><span>2</span></li>
+                <li><span>Fridges and chillers</span><span>3</span></li>
+                <li><span>Freezers (business rule)</span><span>5</span></li>
+                <li><span>Cooking poultry, mince and liver</span><span>6</span></li>
+                <li><span>Cooling batches</span><span>7</span></li>
+                <li><span>Deliveries</span><span>8</span></li>
+                <li><span>Staff training</span><span>9</span></li>
+                <li><span>Recall tests, key dates and suppliers</span><span>10</span></li>
+                <li><span>Optional records</span><span>11</span></li>
+              </ol>
+            </div>
+          </div>
+        </figure>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="paper" aria-labelledby="paper-h">
+    <div class="wrap" style="padding-bottom:24px">
+      <p class="kicker">The paper problem</p>
+      <h2 class="display" id="paper-h" style="margin-top:14px">Paper doesn't<br>survive a kitchen.</h2>
+      <ul class="pains">
+        <li><span class="x"><svg width="24" height="24" fill="none" stroke="#7E3209" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-pen"/></svg></span>Records filled in later, from memory</li>
+        <li><span class="x"><svg width="24" height="24" fill="none" stroke="#7E3209" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-wet"/></svg></span>Sheets get wet, faded or lost</li>
+        <li><span class="x"><svg width="24" height="24" fill="none" stroke="#7E3209" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-paper"/></svg></span>Days of sorting before the verifier comes</li>
+        <li><span class="x"><svg width="24" height="24" fill="none" stroke="#7E3209" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-calendar"/></svg></span>Visit date lost in an email</li>
+      </ul>
+      <p class="turn">SousMate does it as you go.
+        <svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-down"/></svg></p>
+    </div>
+  </section>
+
+  <section id="how" class="pad" aria-labelledby="how-h" style="padding-top:48px">
+    <div class="wrap how">
+      <div>
+        <p class="kicker">How it works</p>
+        <h2 class="display" id="how-h" style="margin-top:14px">Tap. Check.<br>Done.</h2>
+        <ol class="steps">
+          <li><span class="step-n" aria-hidden="true">1</span><div><h3>See what's left today</h3><p>Checks still to do sit at the top.</p></div></li>
+          <li><span class="step-n" aria-hidden="true">2</span><div><h3>Type the temperature</h3><p>It says "OK" or "Too warm" in plain words.</p></div></li>
+          <li><span class="step-n" aria-hidden="true">3</span><div><h3>Saved, with name and time</h3><p>One record per tap. Backed up. A fix never erases the original.</p></div></li>
+        </ol>
+      </div>
+      <figure>
+        <div class="phone" role="img" aria-label="The Today tab for Sample Café with sample data: Mia is on shift. 1 of 3 required done, backed up 2 minutes ago. A reminder: Somchai has no training yet. Buttons to log cooking, log a delivery and start cooling. Still to do: cooling beef stock, 21°C or colder before 12:15, 48 minutes left; fridges and freezers, 1 of 4 checked. Done: cooking chicken thighs, 75.2°C for 1 minute.">
+          <div class="screen tall today" aria-hidden="true">
+            <div class="hd flat">
+              <p class="hd-proto">Prototype with sample data</p>
+              <div class="hd-top"><div class="hd-lines"><p class="hd-shop">Sample Café</p><p class="hd-date">Saturday 24 October</p></div><span class="chip"><span class="av">M</span>Mia</span></div>
+              <p class="hd-title">Today</p>
+            </div>
+            <div class="sb">
+              <div class="thero"><span class="pill-m">1 of 3 required done</span><span class="backed"><svg width="14" height="14" fill="none" stroke="#8EE6C9" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><use href="#i-check"/></svg>Backed up 2 min ago</span></div>
+              <div class="banner"><svg width="24" height="24" fill="none" stroke="#A9440C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-bell"/></svg><span><b>! Somchai: no training yet</b> <i>· +1 more</i></span><svg width="20" height="20" fill="none" stroke="#0E2A2C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chevron"/></svg></div>
+              <div class="quick"><div><svg width="26" height="26" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-cooking"/></svg>Log cooking</div><div><svg width="26" height="26" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-delivery"/></svg>Log delivery</div><div><svg width="26" height="26" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-cooling"/></svg>Start cooling</div></div>
+              <p class="h2s">Still to do <span class="n">2</span></p>
+              <div class="card"><span class="ico"><svg width="26" height="26" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-cooling"/></svg></span><div class="grow"><p class="ct">Cooling · beef stock</p><p class="cs"><svg width="18" height="18" fill="none" stroke="#43585A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-clock"/></svg>21°C or colder before 12:15 · 48 min left</p></div><svg width="22" height="22" fill="none" stroke="#0E2A2C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chevron"/></svg></div>
+              <div class="card"><span class="ico"><svg width="26" height="26" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-fridge"/></svg></span><div class="grow"><p class="ct">Fridges and freezers</p><p class="cs"><span class="dots"><i></i><i></i><i></i><i></i></span>1 of 4 checked</p></div><svg width="22" height="22" fill="none" stroke="#0E2A2C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chevron"/></svg></div>
+              <p class="h2s">Done</p>
+              <div class="card done"><span class="ico"><svg width="26" height="26" fill="none" stroke="#0E2A2C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-cooking"/></svg></span><div class="grow"><p class="ct">Cooking: Chicken thighs</p><p class="cs">Mia. 75.2°C for 1 min</p></div><span class="stamp">✓ Done 11:05</span></div>
+            </div>
+            <div class="sdock">
+              <div class="snav"><span class="on"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-today"/></svg>Today</span><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-calendar"/></svg>What's due</span><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-history"/></svg>History</span><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-team"/></svg>Team</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption>Today, as staff see it</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="records" class="grey pad" aria-labelledby="rec-h">
+    <div class="wrap">
+      <p class="kicker">What you can record</p>
+      <h2 class="display" id="rec-h" style="margin-top:14px">Your whole<br>kitchen day.</h2>
+      <ul class="tiles">
+        <li><span class="ti"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-fridge"/></svg></span><h3>Fridges &amp; chillers</h3><p>Quick temperature checks.</p></li>
+        <li><span class="ti"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-cooking"/></svg></span><h3>Cooking</h3><p>MPI time and temperature combos, built in.</p></li>
+        <li><span class="ti"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-hothold"/></svg></span><h3>Hot holding <span class="tag-opt">Record optional</span></h3><p>Bain-marie and hot cabinet checks. You still keep food hot; writing it down is up to you.</p></li>
+        <li><span class="ti"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-cooling"/></svg></span><h3>Cooling</h3><p>Both stages, with a timer.</p></li>
+        <li><span class="ti"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-delivery"/></svg></span><h3>Deliveries</h3><p>Chilled food 5°C or colder, or it goes back.</p></li>
+        <li><span class="ti"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-problem"/></svg></span><h3>Problems</h3><p>What went wrong, and what you did.</p></li>
+        <li><span class="ti"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-training"/></svg></span><h3>Staff training</h3><p>Who learned what, and when.</p></li>
+        <li><span class="ti"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-clean"/></svg></span><h3>Cleaning <span class="tag-opt">Record optional</span></h3><p>Your cleaning plan. Tick what you cleaned. Never says “missed”.</p></li>
+        <li><span class="ti"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-service"/></svg></span><h3>Equipment</h3><p>Maintenance and repairs: what was done, when and who.</p></li>
+        <li><span class="ti"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-thermo"/></svg></span><h3>Calibration</h3><p>Thermometers and scales, on your own schedule.</p></li>
+        <li><span class="ti"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-download"/></svg></span><h3>Inspection-day export</h3><p>A tidy PDF for your verifier, cleaning and calibration included.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Cleaning (docs/specs/cleaning.md C1: plan, starter tasks, ticks, optional record CL9/CL10 Guidance p.39, NP2 p.29,
+       P-CL1 never "missed", PDF weekly grid crit. 23) and equipment (docs/specs/equipment.md C1+C2: list, maintenance and
+       repairs, calibration methods from templates/nz/equipment.json, own schedule P-EQ1 / EQ-23, PDF EQ-29).
+       Phone: the Calibration form (board CalibrationAdd, src/features/equipment/CalibrationForm.tsx), contrast option A. -->
+  <section id="kit" class="pad" aria-labelledby="kit-h">
+    <div class="wrap how">
+      <div>
+        <p class="kicker">Cleaning and equipment</p>
+        <h2 class="display" id="kit-h" style="margin-top:14px">Clean. Service.<br>Calibrate.</h2>
+        <ul class="steps">
+          <li><span class="step-n" aria-hidden="true"><svg width="26" height="26" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-clean"/></svg></span><div><h3>A cleaning plan in minutes</h3><p>Start with suggested tasks, then make them yours: what, how, how often and who.</p></div></li>
+          <li><span class="step-n" aria-hidden="true"><svg width="26" height="26" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-check"/></svg></span><div><h3>Tick what you cleaned</h3><p>One tap per task, or Tick all, then save. A cleaning record is optional, so SousMate never calls a day “missed”.</p></div></li>
+          <li><span class="step-n" aria-hidden="true"><svg width="26" height="26" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-service"/></svg></span><div><h3>Equipment, maintenance and repairs</h3><p>One list of your equipment. Log a service or a repair: what was done, when and who did it.</p></div></li>
+          <li><span class="step-n" aria-hidden="true"><svg width="26" height="26" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-thermo"/></svg></span><div><h3>Thermometer and scale checks</h3><p>Calibrate in ice slush or boiling water, against another thermometer, or with a test weight. Set your own schedule and What's due shows the next date.</p></div></li>
+          <li><span class="step-n" aria-hidden="true"><svg width="26" height="26" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-download"/></svg></span><div><h3>In the verifier PDF</h3><p>A weekly cleaning page, plus your equipment list, maintenance and calibration.</p></div></li>
+        </ul>
+      </div>
+      <figure>
+        <div class="phone" role="img" aria-label="The Calibration screen for Probe 1, with sample data. Done by Mia, today, with a Change link. Method: Ice slush is chosen; the other choices are Boiling water, Another thermometer, Service and Other. Should read minus 1 to 1 °C, with a How? link and an Add °C link. Two buttons: Accurate, filled, and Not accurate. The bottom bar shows Team selected.">
+          <div class="screen tall" aria-hidden="true">
+            <div class="hd">
+              <div class="sub-top"><span class="back"><svg width="20" height="20" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-back"/></svg>Probe 1</span><span class="hd-proto">Prototype with sample data</span></div>
+              <p class="sub-title">Calibration</p>
+            </div>
+            <div class="sb">
+              <div class="vcard" style="padding:4px 16px">
+                <div class="whorow"><svg width="22" height="22" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-person"/></svg><span class="grow" style="font-weight:600">Done by Mia · Today</span><span class="lnk">Change</span></div>
+              </div>
+              <div class="vcard" style="display:flex;flex-direction:column;gap:10px">
+                <p class="lbl">Method</p>
+                <div class="chips"><span class="on">Ice slush</span><span>Boiling water</span><span>Another thermometer</span><span>Service</span><span>Other</span></div>
+                <div class="range"><svg width="22" height="22" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-thermo"/></svg><p>Should read −1 to 1 °C</p><span class="lnk">How?</span></div>
+                <span class="lnk" style="margin-top:-8px">Add °C</span>
+                <div class="ans ok">Accurate ✓</div>
+                <div class="ans bad">Not accurate</div>
+              </div>
+            </div>
+            <div class="sdock">
+              <div class="snav"><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-today"/></svg>Today</span><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-calendar"/></svg>What's due</span><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-history"/></svg>History</span><span class="on"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-team"/></svg>Team</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption>Calibration in two taps</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="due" class="ink pad" aria-labelledby="due-h">
+    <div class="wrap dueg">
+      <figure>
+        <div class="phone" role="img" aria-label="The What's due tab for Sample Café with sample dates, each with a countdown bar: registration ends in 28 days, coming up, registered 21 Nov 2025, ends 21 Nov 2026; mock recall in 130 days, all good, last test 3 Mar 2026, due 3 Mar 2027; next verification in 142 days, all good, last visit 14 Mar 2026, next 15 Mar 2027. Registration has a What to do button.">
+          <div class="screen tall" aria-hidden="true">
+            <div class="hd">
+              <p class="hd-proto">Prototype with sample data</p>
+              <div class="hd-top"><div class="hd-lines"><p class="hd-shop">Sample Café</p><p class="hd-date">Saturday 24 October</p></div></div>
+              <p class="hd-title">What's due</p>
+            </div>
+            <div class="sb" style="padding-top:18px">
+              <p class="h2s" style="margin-top:0">Dates</p>
+              <div class="due">
+                <div class="row"><span class="ico"><svg width="26" height="26" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-registration"/></svg></span><div class="dtl"><p class="ct">Registration ends</p><span class="tag up">Coming up</span></div><span class="why">Why?</span></div>
+                <p class="numrow"><span class="num">28</span><span>days left · renew</span></p>
+                <div class="cd"><div class="cd-track"><i style="width:92%;background:#0B6B72"></i></div><p class="cd-lbl"><span>Registered <b>21 Nov 2025</b></span><span>Ends <b>21 Nov 2026</b></span></p></div>
+                <p class="help">Saturday 21 November 2026 · from your council</p>
+                <div class="go">What to do<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chevron"/></svg></div>
+              </div>
+              <div class="due">
+                <div class="row"><span class="ico"><svg width="26" height="26" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-recall"/></svg></span><div class="dtl"><p class="ct">Mock recall</p><span class="tag good">✓ All good</span></div><span class="why">Why?</span></div>
+                <p class="numrow"><span class="num">130</span><span>days to go</span></p>
+                <div class="cd"><div class="cd-track"><i style="width:64%;background:#08555B"></i></div><p class="cd-lbl"><span>Last test <b>3 Mar 2026</b></span><span>Due <b>3 Mar 2027</b></span></p></div>
+                <p class="help">By Wednesday 3 March 2027 · every 12 months</p>
+              </div>
+              <div class="due">
+                <div class="row"><span class="ico"><svg width="26" height="26" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-verify"/></svg></span><div class="dtl"><p class="ct">Next verification</p><span class="tag good">✓ All good</span></div><span class="why">Why?</span></div>
+                <p class="numrow"><span class="num">142</span><span>days to go</span></p>
+                <div class="cd"><div class="cd-track"><i style="width:61%;background:#08555B"></i></div><p class="cd-lbl"><span>Last visit <b>14 Mar 2026</b></span><span>Next <b>15 Mar 2027</b></span></p></div>
+                <p class="help">Monday 15 March 2027 · from your verifier</p>
+              </div>
+            </div>
+            <div class="sdock">
+              <div class="snav"><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-today"/></svg>Today</span><span class="on"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-calendar"/></svg>What's due</span><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-history"/></svg>History</span><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-team"/></svg>Team</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption>What's due, for the owner</figcaption>
+      </figure>
+      <div>
+        <p class="kicker">What's due</p>
+        <h2 class="display" id="due-h" style="margin-top:14px">No more<br><span class="mint">surprise dates.</span></h2>
+        <p class="lead sub2" style="margin-top:20px;max-width:520px">Your verifier emails the date. Add it once and SousMate counts down, so it never gets lost in the inbox.</p>
+        <ul class="dlist">
+          <li><span class="di"><svg width="26" height="26" fill="none" stroke="#8EE6C9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-registration"/></svg></span><div><b>Registration renewal</b><span>The date from your council</span></div></li>
+          <li><span class="di"><svg width="26" height="26" fill="none" stroke="#8EE6C9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-verify"/></svg></span><div><b>Verification</b><span>The date in your verifier's email</span></div></li>
+          <li><span class="di"><svg width="26" height="26" fill="none" stroke="#8EE6C9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-recall"/></svg></span><div><b>Mock recall</b><span>A practice run, so you're ready</span></div></li>
+          <li><span class="di"><svg width="26" height="26" fill="none" stroke="#8EE6C9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-thermo"/></svg></span><div><b>Calibration and servicing</b><span>Your own schedule, never “overdue”</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="safe" class="pad" aria-labelledby="safe-h">
+    <div class="wrap">
+      <p class="kicker">Kept safe</p>
+      <h2 class="display" id="safe-h" style="margin-top:14px">Nothing gets<br>wet, torn or lost.</h2>
+      <div class="keep">
+        <div class="big4">
+          <p class="yrs">4<small>years</small></p>
+          <p>Every record backed up and kept for 4 years.</p>
+        </div>
+        <div class="k"><span class="ti"><svg width="26" height="26" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-wifioff"/></svg></span><h3>No internet? Fine.</h3><p>Keeps working in the kitchen. Backs up when you're online.</p></div>
+        <div class="k"><span class="ti"><svg width="26" height="26" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-devices"/></svg></span><h3>Phone, tablet or PC</h3><p>Use the shared kitchen tablet or your own phone.</p></div>
+        <div class="k"><span class="ti"><svg width="26" height="26" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-history"/></svg></span><h3>Never erased</h3><p>A correction is added. The original stays.</p></div>
+        <div class="k"><span class="ti"><svg width="26" height="26" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-team"/></svg></span><h3>Every name, every time</h3><p>Each record shows who did it and when.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="try" class="cta pad" aria-labelledby="try-h">
+    <div class="wrap inner">
+      <h2 class="display" id="try-h">Try it in<br>your kitchen.</h2>
+      <p class="lead">Works in the browser on a phone, tablet or PC. No download, nothing to set up. Free while we're testing.</p>
+      <div class="btns">
+        <a class="btn btn-white" href="https://demo.sousmate.co.nz/">Try the free demo
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+      <div class="more">
+        <p class="ask">Questions? <a href="mailto:hello@sousmate.co.nz">hello@sousmate.co.nz</a></p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <a class="brand" href="#top" aria-label="SousMate, back to top"><img src="icon.svg" alt="" width="36" height="36" style="width:36px;height:36px"><span>Sous<span class="mint">Mate</span></span></a>
+      <p>Less paperwork. More cooking.</p>
+    </div>
+    <ul aria-label="More">
+      <li><a href="https://demo.sousmate.co.nz/">Try the free demo</a></li>
+      <li><a href="mailto:hello@sousmate.co.nz">hello@sousmate.co.nz</a></li>
+    </ul>
+    <div class="fine">
+      <p>© 2026 SousMate. Made in New Zealand · sousmate.co.nz</p>
+      <p>This site has no forms, cookies or tracking.</p>
+      <p>SousMate is an independent app. It is not part of, or approved by, the Ministry for Primary Industries (MPI) or the New Zealand Government. Check your own food control plan or national programme for what applies to you.</p>
+    </div>
+  </div>
+</footer>
+<script>
+/* Hero try-it card. Same checks as the app (src/core/rules/temperature.ts, templates/nz/fridge-temp.json):
+   limit 5.0°C inclusive (MPI SS&S S39-00006 p.42-43); input -30 to 50, 1 decimal (app sanity, not MPI).
+   Status wording: en.json "ok" / "bad" with max 5 (the app's TempField), plus the board's "Move the food. Check the fridge."
+   Sign slot as SignedTempField (ui-tidy-a A5): the sign is kept apart from the digits, fridges start on "+", a typed or
+   pasted leading sign moves into the slot, -0 reads 0.0°C, and the slot keeps focus in the number. Nothing is stored or sent. */
+(function () {
+  var MAX_C = 5.0, IN_MIN = -30, IN_MAX = 50, SPAN = 9; // SPAN: gauge display only, as RoundRow.tsx
+  var NUMBER = /^(\d+)(?:[.,](\d+))?$/;
+  var LEAD = /^\s*([+\-−–])/;
+  var $ = function (id) { return document.getElementById(id) };
+  var input = $('try-temp'), sign = $('try-sign'), field = $('try-field'), rb = $('try-rb'), status = $('try-status'),
+      mark = $('try-mark'), act = $('try-act'), what = $('try-what'), err = $('try-err'), save = $('try-save'),
+      count = $('try-count'), bar = $('try-bar'), dot3 = $('try-dot3');
+  if (!input) return;
+  var saved = false, minus = false; // fridges start on "+"
+
+  function parse(raw) {
+    var s = raw.trim();
+    if (s === '') return { kind: 'empty' };
+    var m = NUMBER.exec(s);
+    if (!m) return { kind: 'err', msg: 'Enter a number, e.g. 3.5' };
+    if (m[2] && m[2].length > 1) return { kind: 'err', msg: 'Use at most 1 decimal place' };
+    var v = Number(m[1] + '.' + (m[2] || '0'));
+    if (minus && v !== 0) v = -v; // -0 reads and checks as 0.0
+    if (v < IN_MIN || v > IN_MAX) return { kind: 'err', msg: 'Check the reading: allowed ' + IN_MIN + ' to ' + IN_MAX + ' °C' };
+    return { kind: v <= MAX_C ? 'ok' : 'warm', v: v };
+  }
+
+  function fmt(v) { return (v < 0 ? '−' : '') + Math.abs(v).toFixed(1) + '°C' }
+
+  function render() {
+    var p = parse(input.value);
+    sign.textContent = minus ? '−' : '+';
+    sign.setAttribute('aria-label', minus ? 'Change to plus' : 'Change to minus');
+    if (p.kind === 'ok') { status.className = 'tstat ok'; status.textContent = '✓ OK — 5°C or lower' }
+    else if (p.kind === 'warm') { status.className = 'tstat bad'; status.textContent = '✕ Too warm — above 5°C. Move the food. Check the fridge.' }
+    else if (p.kind === 'err') { status.className = 'tstat bad'; status.textContent = p.msg }
+    else { status.className = 'tstat none'; status.textContent = 'Enter a temperature' }
+    input.setAttribute('aria-invalid', p.kind === 'err' ? 'true' : 'false');
+    field.className = p.kind === 'err' ? 'tfield bad' : 'tfield';
+    if (p.kind === 'ok' || p.kind === 'warm') {
+      rb.textContent = 'Reading: ' + fmt(p.v);
+      var pct = Math.max(0, Math.min(100, (p.v - (MAX_C - SPAN)) / (2 * SPAN) * 100));
+      mark.style.left = pct + '%'; mark.hidden = false;
+    } else { rb.textContent = ''; mark.hidden = true }
+    act.hidden = p.kind !== 'warm';
+    count.textContent = saved ? '3 of 3 checked' : '2 of 3 checked';
+    bar.style.width = saved ? '100%' : '66.67%';
+    dot3.className = saved ? 'on' : '';
+    save.textContent = saved ? '✓ Saved 1 reading' : 'Save 1 reading';
+    save.className = saved ? 'tsave done' : 'tsave';
+    return p;
+  }
+
+  function edited() { saved = false; err.textContent = ''; render() }
+
+  function trySave() {
+    if (saved) { edited(); input.focus(); return } // tap again: start over
+    var p = parse(input.value);
+    if (p.kind === 'empty' || p.kind === 'err') {
+      err.textContent = 'Fix 1 thing before saving. Fridge 1: enter a number like 3.5';
+      input.focus(); return;
+    }
+    if (p.kind === 'warm' && what.value.trim() === '') {
+      err.textContent = 'Fix 1 thing before saving. Fridge 1: say what you did';
+      what.focus(); return;
+    }
+    err.textContent = ''; saved = true; render();
+  }
+
+  input.addEventListener('input', function () {
+    // A typed or pasted leading sign sets the slot and is removed from the digits (A5-3).
+    var m = LEAD.exec(input.value);
+    if (m) { minus = m[1] !== '+'; input.value = input.value.slice(m[0].length) }
+    edited();
+  });
+  what.addEventListener('input', edited);
+  input.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); trySave() } });
+  // Keep focus in the number so a phone keypad does not close (as SignedTempField).
+  sign.addEventListener('pointerdown', function (e) { e.preventDefault() });
+  sign.addEventListener('mousedown', function (e) { e.preventDefault() });
+  sign.addEventListener('click', function () { minus = !minus; edited() });
+  save.addEventListener('click', trySave);
+  render();
+})();
+</script>
+</body>
+</html>
