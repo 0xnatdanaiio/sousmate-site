@@ -1,0 +1,26 @@
+# SousMate
+
+> Food safety records for New Zealand kitchens: an app for cafés, bakeries, food trucks, fish & chip shops and home
+> kitchens that run the MPI Simply Safe & Suitable template food control plan or National Programme 2. Staff record
+> checks as they go on a phone, tablet or PC, even offline, and the owner hands the verifier one PDF.
+
+SousMate is made in New Zealand. It keeps records; it does not approve a business or replace the verifier.
+
+## What it does
+
+- Record as you go: fridge, chiller and freezer checks, cooking (poultry, mince, liver), cooling, deliveries, staff training, and optional records such as hot holding and cleaning. Each record keeps who did it and when; a correction never overwrites the original.
+- Know what's due: today's checks and dates coming up (registration renewal, verification visit, staff training, recall test, equipment checks).
+- Ready for your verifier: an Inspection day page and one PDF that sums up every record type, missed days and problems with what was done.
+- Works on phone, tablet or PC, even offline.
+
+## Pricing (NZD)
+
+- 30 days of everything free, no card needed. After that, choose a plan or stay on the Free plan; records are not deleted.
+- Monthly: NZ$19.99 a month.
+- Yearly: NZ$199 a year.
+
+## Links
+
+- [Home](https://sousmate.co.nz/): what SousMate does, pricing
+- [Help](https://sousmate.co.nz/help/): getting started and common questions
+- Contact: hello@sousmate.co.nz

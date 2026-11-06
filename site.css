@@ -1,0 +1,696 @@
+/* Kitchen ink tokens: docs/design/design-system.md section 1, with visual refresh B Honey (section 27, src/index.css):
+   warm page, 3:1 card edges, typed record tiles, honey only for progress / done (never text, never a border on a light
+   surface, never on a warning or a due state). The page is light only. */
+:root{
+  --ink:#0E2A2C; --ink-raised:#1C3D40; --teal:#0B6B72; --teal-dark:#08555B;
+  --mint:#8EE6C9; --wash:#DFF5EE; --surface:#E7EEEC; --paper:#FFFFFF; --quiet:#F3F7F6;
+  --bg:#ECE8DF; --band:#E2DCCF; --edge:#7D776B; --shadow:0 1px 2px rgba(14,42,44,.14); --btn2-edge:#5C7471;
+  --honey:#F4C152; --on-honey:#0E2A2C;
+  --muted:#43585A; --muted-ink:#A9C4C2; --line:#7D776B; --warn:#A9440C; --warn-dark:#7E3209; --warn-tint:#FBE6D9;
+  --wrap:1200px;
+  /* landing-polish (2026-11-07): the app's warm row divider (design-system 35), decoration only */
+  --divider:#E6E1D6;
+  /* Phone mock-ups and the try-it card: the app as shipped, Honey light (src/index.css :root, design-system.md
+     sections 17 and 27). Mock-ups only. */
+  --m-bg:#ECE8DF; --m-card:#FFFFFF; --m-muted:#43585A; --m-line-input:#5C7471; --m-icon:#E3EBE9;
+  --m-edge:#7D776B; --m-shadow:0 1px 2px rgba(14,42,44,.14); --m-done:#DFF5EE; --m-disabled:#D5DFDC;
+  --m-btn2-edge:#5C7471; --m-chip-edge:#5C7471; --m-opt-edge:#7D776B; --m-track:#E7E2D6;
+  /* Record-type tiles (design-system 27): fill / icon, all 5:1 or more */
+  --t-fridge-bg:#DCEAF7; --t-fridge-fg:#1D5A93; --t-cooling-bg:#D3EEF0; --t-cooling-fg:#0B6B72;
+  --t-cooking-bg:#EEDFF3; --t-cooking-fg:#6E3A80; --t-delivery-bg:#DDEFD9; --t-delivery-fg:#2E6A2A;
+  --t-hothold-bg:#E2E3F6; --t-hothold-fg:#3E4396; --t-reheat-bg:#EEE8DC; --t-reheat-fg:#6A5730;
+  --t-reg-bg:#E1E7EE; --t-reg-fg:#33495F;
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+/* Inter variable (SIL OFL 1.1, fonts/OFL-Inter.txt), self-hosted: no request to Google or any other origin. */
+@font-face{font-family:'Inter Variable';font-style:normal;font-display:swap;font-weight:100 900;src:url('fonts/inter-latin-ext-wght-normal.woff2') format('woff2-variations');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Inter Variable';font-style:normal;font-display:swap;font-weight:100 900;src:url('fonts/inter-latin-wght-normal.woff2') format('woff2-variations');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Atkinson Hyperlegible Next';font-style:normal;font-display:swap;font-weight:200 800;src:url('fonts/atkinson-hyperlegible-next-latin-wght-normal.woff2') format('woff2-variations');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+body{margin:0;font-family:'Inter Variable','Inter',system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--ink);background:var(--bg);font-size:18px;line-height:1.5;overflow-x:hidden}
+img,svg{display:block}
+h1,h2,h3,p{margin:0}
+a{color:var(--teal)}
+a:hover{color:var(--teal-dark)}
+:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+.ink :focus-visible,.cta :focus-visible{outline-color:var(--mint)}
+.cta :focus-visible{outline-color:var(--paper)}
+.skip{position:absolute;left:12px;top:-100px;z-index:10;background:var(--mint);color:var(--ink);font-weight:700;padding:12px 18px;border-radius:9999px;text-decoration:none}
+.skip:focus{top:12px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 20px}
+@media (min-width:720px){.wrap{padding:0 32px}}
+
+/* type */
+.display{font-weight:900;text-transform:uppercase;letter-spacing:-0.045em;line-height:.88;overflow-wrap:break-word}
+/* body hides sideways overflow, so a word wider than its box would be cut, not scrolled: break it instead (never needed at tested widths) */
+.pc h3{overflow-wrap:break-word}
+h1.display{font-size:clamp(44px,13vw,112px);letter-spacing:-0.05em}
+h2.display{font-size:clamp(36px,8vw,80px)}
+.lead{font-size:clamp(19px,2.2vw,24px);line-height:1.35}
+.mint{color:var(--mint)}
+.kicker{font-size:15px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:var(--teal-dark)}
+.ink .kicker{color:var(--mint)}
+
+/* buttons: pills, no shadows */
+.btns{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:56px;padding:0 28px;border-radius:9999px;font-weight:700;font-size:18px;text-decoration:none;border:2px solid transparent;transition:background-color .15s,color .15s}
+.btn svg{flex:none}
+.btn-mint{background:var(--mint);color:var(--ink)}
+.btn-mint:hover{background:#B5F0DC;color:var(--ink)}
+.btn-ghost{border-color:#FFFFFF;color:#FFFFFF}
+.btn-ghost:hover{background:#FFFFFF;color:var(--ink)}
+.btn-teal{background:var(--teal);color:#FFFFFF}
+.btn-teal:hover{background:var(--teal-dark);color:#FFFFFF}
+.btn-line{border-color:var(--btn2-edge);color:var(--ink);background:var(--paper)}
+.btn-line:hover{background:var(--wash);color:var(--ink)}
+.btn-white{background:#FFFFFF;color:var(--ink)}
+.btn-white:hover{background:var(--wash);color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.btn{transition:none}}
+
+/* header */
+.ink{background:var(--ink);color:#FFFFFF}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;padding-bottom:14px}
+.brand{display:inline-flex;align-items:center;gap:10px;min-height:48px;color:#FFFFFF;text-decoration:none;font-family:'Atkinson Hyperlegible Next','Inter Variable','Inter',system-ui,sans-serif;font-weight:700;font-size:22px;letter-spacing:-0.02em}
+.brand img{width:40px;height:40px}
+.brand:hover{color:#FFFFFF}
+.nav{display:flex;align-items:center;gap:4px}
+.nav a.link{display:none;align-items:center;min-height:48px;padding:0 14px;border-radius:9999px;color:#FFFFFF;text-decoration:none;font-weight:600;font-size:16px}
+.nav a.link:hover{background:var(--ink-raised);color:#FFFFFF}
+.nav .btn{min-height:48px;padding:0 18px;font-size:16px}
+@media (min-width:860px){.nav a.link{display:inline-flex}}
+/* Sign in stays visible on phones too (the other links fold away below 860 px). */
+.nav a.signin{display:inline-flex;white-space:nowrap;margin-right:16px}
+.nav .btn{white-space:nowrap}
+/* Under 460 px: tighten the header so brand, Sign in and Free demo fit on one line, with room for a 17 px desktop
+   scrollbar (a narrow desktop window cut Free demo off at 360-366 and 420-426 px). Under 360 px the brand word
+   folds away (the icon stays, and the link keeps its aria-label). Targets stay 48 px tall. */
+@media (max-width:459px){.top{gap:6px}.nav{gap:2px}.brand{gap:7px;font-size:19px}.brand img{width:32px;height:32px}.nav a.signin{padding:0 8px;font-size:15px;margin-right:4px}.nav .btn{padding:0 12px;font-size:15px}}
+@media (max-width:359px){.brand > span{display:none}}
+
+/* hero */
+.hero{display:grid;gap:40px;padding-top:36px;padding-bottom:0;align-items:end}
+.hero-copy{display:flex;flex-direction:column;gap:24px;padding-bottom:8px}
+.hero .sub{color:var(--muted-ink);max-width:560px}
+.hero .sub b{color:#FFFFFF;font-weight:700}
+.for{font-size:15px;color:var(--muted-ink);max-width:520px}
+.hero-phone{display:flex;justify-content:center;margin-bottom:-120px}
+@media (min-width:980px){
+  .hero{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);padding-top:56px}
+  .hero-copy{padding-bottom:180px}
+}
+.after-hero{height:150px;background:var(--bg)}
+
+/* phone mock-ups (HTML copies of the prototype boards and the live app, decorative). Boards: Main, Due, History,
+   Fridge, FreezerTemp; design-system.md sections 12 (header, section heading, bottom nav) and 13 (sign slot, countdown bar, period select). */
+figure{margin:0}
+.phone{--z:.74;width:calc(390px * var(--z) + 20px);border:10px solid var(--ink);border-radius:46px;background:linear-gradient(var(--ink) 50%,var(--m-bg) 50%);overflow:hidden;flex:none}
+.ink .phone{border-color:var(--ink-raised)}
+/* narrow phones (320-389 px): the how-it-works and What's due phones fit the 280 px column */
+@media (max-width:389px){.how .phone,.dueg .phone{--z:.66}}
+@media (min-width:420px){.phone{--z:.8}}
+@media (min-width:980px){.hero-phone .phone,.how .phone,.dueg .phone{--z:.9}}
+.screen{zoom:var(--z);width:390px;height:760px;display:flex;flex-direction:column;background:linear-gradient(var(--ink) 40px,var(--m-bg) 40px);color:var(--ink);font-size:16px;line-height:1.3;overflow:hidden;position:relative}
+.screen.tall{height:800px}
+.screen.round{height:860px}
+.screen.today{height:850px}
+/* Header A on the main tabs: shop name, NZ date, big title (44 px on phones, same on every tab) */
+.hd{flex:none;position:relative;z-index:1;background:var(--ink);color:#FFFFFF;border-radius:0 0 28px 28px;padding:10px 20px 20px;display:flex;flex-direction:column}
+.hd.flat{border-radius:0}
+/* room for the phone frame's rounded top corners (a status-bar area), so no header text is clipped */
+.screen>.hd:first-child{padding-top:30px}
+.hd-proto{margin-bottom:4px;font-size:12px;line-height:1.25;color:var(--muted-ink)}
+.hd-top{display:flex;align-items:center;gap:12px;min-height:48px}
+.hd-lines{flex:1;min-width:0}
+.hd-shop{font-size:15px;font-weight:700;line-height:1.25;white-space:nowrap}
+.hd-date{margin-top:2px;font-size:14px;line-height:1.25;color:var(--muted-ink);white-space:nowrap}
+.hd-title{margin-top:10px;font-size:44px;line-height:.9;font-weight:900;letter-spacing:-0.045em;text-transform:uppercase;white-space:nowrap}
+/* sub-screen header: Back + smaller title (32 px) */
+.sub-top{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:48px}
+.sub-top .hd-proto{margin:0}
+.back{display:flex;align-items:center;gap:4px;font-size:15px;font-weight:600}
+.sub-title{margin-top:6px;font-size:32px;line-height:.95;font-weight:900;letter-spacing:-0.045em;text-transform:uppercase}
+.rule{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}
+.rule b{display:flex;align-items:center;gap:6px;font-size:16px}
+.rule u{font-size:15px;font-weight:700}
+.sb{flex:1;padding:16px;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+/* shift chip */
+.chip{flex:none;display:flex;align-items:center;gap:8px;height:48px;padding:0 14px 0 8px;border-radius:9999px;background:var(--ink-raised);font-weight:600;font-size:15px}
+.av{width:32px;height:32px;border-radius:9999px;background:var(--mint);color:var(--ink);display:flex;align-items:center;justify-content:center;font-weight:700}
+/* Today */
+/* B-79: the count pill sits on the TODAY row, right-aligned and centred on the heading; the ink panel under the header is only its 8 px rounded end */
+.hd-trow{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;column-gap:12px;row-gap:10px;margin-top:10px}
+.hd-trow .hd-title{margin-top:0}
+.hd-trow .pill-m{white-space:nowrap}
+.thero{flex:none;margin:-16px -16px 4px;min-height:8px;background:var(--ink);border-radius:0 0 28px 28px / 0 0 8px 8px}
+/* honey count pill (design-system 27): ink text on honey, never honey text */
+.pill-m{display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:0 16px;border-radius:9999px;background:var(--honey);color:var(--on-honey);font-weight:700;font-size:15px}
+.backed{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted-ink)}
+.banner{display:flex;align-items:center;gap:12px;min-height:52px;padding:8px 12px 8px 14px;border-radius:28px;background:var(--m-card);border:2px solid var(--warn);font-size:15px}
+.banner span{flex:1}
+.banner b{color:var(--warn-dark)}
+.banner i{font-style:normal;color:var(--m-muted)}
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.quick div{height:84px;border-radius:20px;background:var(--m-card);border:1px solid var(--m-edge);box-shadow:var(--m-shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-weight:700;font-size:15px}
+.quick .ico{width:40px;height:40px;border-radius:12px}
+/* section heading: one style, uppercase */
+.h2s{font-weight:900;font-size:20px;line-height:1.1;letter-spacing:-0.03em;text-transform:uppercase;display:flex;align-items:center;gap:8px;margin-top:8px}
+.h2s .tag{text-transform:none;letter-spacing:0}
+.n{display:inline-flex;min-width:22px;height:22px;padding:0 6px;border-radius:20px;background:var(--ink);color:var(--m-bg);font-size:13px;letter-spacing:0;align-items:center;justify-content:center}
+/* cards: a 1 px edge and a slight shadow (contrast-a 5.1); Done on the mint wash; optional cards see-through and dashed (5.5) */
+.card{background:var(--m-card);border:1px solid var(--m-edge);box-shadow:var(--m-shadow);border-radius:20px;padding:12px 14px 12px 12px;display:flex;gap:12px;align-items:center;min-height:56px}
+.card.done{background:var(--m-done)}
+.card.opt{background:transparent;box-shadow:none;border:1.5px dashed var(--m-opt-edge)}
+.ico{flex:none;width:44px;height:44px;border-radius:14px;background:var(--tb,var(--m-icon));display:flex;align-items:center;justify-content:center}
+.ico svg{stroke:var(--tf,#0B6B72)}
+/* record-type tiles: the icon and the title always stay, so colour is never the only cue */
+.t-fridge{--tb:var(--t-fridge-bg);--tf:var(--t-fridge-fg)}.t-cooling{--tb:var(--t-cooling-bg);--tf:var(--t-cooling-fg)}
+.t-cooking{--tb:var(--t-cooking-bg);--tf:var(--t-cooking-fg)}.t-delivery{--tb:var(--t-delivery-bg);--tf:var(--t-delivery-fg)}
+.t-hothold{--tb:var(--t-hothold-bg);--tf:var(--t-hothold-fg)}.t-reheat{--tb:var(--t-reheat-bg);--tf:var(--t-reheat-fg)}
+.t-reg{--tb:var(--t-reg-bg);--tf:var(--t-reg-fg)}
+/* go-circle: the one filled "open this" mark on a Still to do card */
+.gocirc{flex:none;width:40px;height:40px;border-radius:9999px;background:var(--teal);display:flex;align-items:center;justify-content:center}
+.secq{display:flex;flex-direction:column;gap:2px;margin-top:4px;padding-top:12px;border-top:1px dashed var(--m-line-input)}
+.secq .h2s{margin:0;font-size:16px}
+.secq p{font-size:14px;color:var(--m-muted)}
+.otag{display:inline-block;font-size:13px;font-weight:700;padding:2px 8px;border-radius:9999px;border:1.5px solid currentColor;color:var(--m-muted);letter-spacing:0;text-transform:none;white-space:nowrap}
+.ct{font-size:18px;line-height:1.1;font-weight:700;letter-spacing:-0.01em}
+.cs{margin-top:2px;font-size:15px;color:var(--m-muted);display:flex;align-items:center;gap:6px}
+.cs.warn{color:var(--warn-dark);font-weight:700}
+.grow{flex:1;min-width:0}
+.dots{display:inline-flex;gap:4px}
+/* Today fridge dots (design-system 27): honey fill with a 2 px ink edge for the 3:1 */
+.dots i{width:12px;height:12px;border-radius:6px;border:2px solid var(--ink)}
+.dots i.on{background:var(--honey)}
+.stamp{flex:none;display:inline-flex;align-items:center;gap:4px;height:28px;padding:0 10px;border-radius:9999px;background:#FFFFFF;color:var(--teal-dark);font-weight:700;font-size:13px;white-space:nowrap}
+/* Done stamp: an ink tick on a 16 px honey dot, plus the word Done */
+.stamp .tk{display:inline-flex;width:16px;height:16px;border-radius:9999px;background:var(--honey);color:var(--on-honey);align-items:center;justify-content:center;font-size:11px}
+/* bottom nav: strip + pill, current tab in mint */
+.sdock{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:12px;background:linear-gradient(to bottom,rgba(236,232,223,0) 0,var(--m-bg) 12px);display:flex;flex-direction:column;gap:10px}
+.snav{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;padding:4px;border:1px solid var(--ink);border-radius:9999px;background:var(--ink)}
+.snav span{height:56px;border-radius:9999px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:13px;font-weight:600;letter-spacing:-0.01em;color:#FFFFFF;white-space:nowrap}
+.snav span.on{background:var(--mint);color:var(--ink);font-weight:700}
+/* What's due date cards with the countdown bar */
+.due{background:var(--m-card);border:1px solid var(--m-edge);box-shadow:var(--m-shadow);border-radius:20px;padding:12px 14px 12px 12px;display:flex;flex-direction:column;gap:8px}
+.row{display:flex;align-items:center;gap:10px}
+.dtl{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.why{font-size:15px;font-weight:700;color:var(--teal);text-decoration:underline}
+/* card corner pencil (design-system 28): 44 px outline circle */
+.pen{flex:none;width:44px;height:44px;margin:-6px 0;border-radius:9999px;border:2px solid var(--m-btn2-edge);color:var(--ink);display:flex;align-items:center;justify-content:center}
+.numrow{display:flex;align-items:baseline;gap:8px;padding-left:54px;font-size:16px;font-weight:700}
+.num{font-size:32px;line-height:1;font-weight:800;letter-spacing:-0.02em;color:var(--teal)}
+.cd{padding-left:54px;display:flex;flex-direction:column;gap:6px}
+.cd-track{height:8px;border-radius:9999px;background:var(--m-track);overflow:hidden}
+.cd-track i{display:block;height:8px;border-radius:9999px}
+.cd-lbl{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 12px;font-size:14px;line-height:1.3;color:var(--m-muted)}
+.cd-lbl b{color:var(--ink);font-weight:700}
+.help{padding-left:54px;font-size:14px;line-height:1.35;color:var(--m-muted)}
+.tag{display:inline-block;font-size:13px;font-weight:700;padding:2px 8px;border-radius:9999px;border:1.5px solid currentColor;white-space:nowrap}
+/* state tags as the app (Reminders dates): Coming up = ink outline, All good = mint wash with a teal edge */
+.tag.up{color:var(--ink)}
+.tag.good{background:var(--wash);color:var(--teal-dark);border-color:var(--teal-dark)}
+.go{height:48px;border-radius:9999px;border:2px solid var(--teal);background:var(--teal);color:#FFFFFF;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:6px}
+figcaption{margin-top:14px;text-align:center;font-size:15px;font-weight:600;color:var(--muted)}
+.ink figcaption{color:var(--muted-ink)}
+
+/* sections */
+section{scroll-margin-top:16px}
+.pad{padding-top:72px;padding-bottom:72px}
+@media (min-width:980px){.pad{padding-top:112px;padding-bottom:112px}}
+.stack{display:flex;flex-direction:column;gap:20px}
+
+/* product cards, right under the hero (Due, Fridge and Verify boards) */
+.vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.pcards{display:grid;gap:16px;padding-bottom:24px}
+@media (min-width:760px){.pcards{grid-template-columns:repeat(2,minmax(0,1fr))}.pc3{grid-column:1 / -1}}
+.pc{border-radius:20px;padding:28px 20px 32px;display:flex;flex-direction:column;gap:28px;overflow:hidden;min-width:0}
+@media (min-width:420px){.pc{padding:32px 24px 36px}}
+@media (min-width:980px){.pc{padding:44px 40px 48px}}
+.pc1{background:var(--mint);color:var(--ink)}
+.pc2{background:var(--ink);color:#FFFFFF}
+.pc3{background:var(--paper);color:var(--ink)}
+.pc-copy{display:flex;flex-direction:column;gap:12px;max-width:520px}
+.pc h3{font-weight:900;font-size:clamp(32px,4.4vw,48px);line-height:1;letter-spacing:-0.04em}
+.pc-copy p{font-size:18px;line-height:1.45}
+.pc1 .pc-copy p{color:var(--ink)}
+.pc2 .pc-copy p{color:var(--muted-ink)}
+.pc3 .pc-copy p{color:var(--muted)}
+.pc-vis{display:flex;justify-content:center;margin-top:auto}
+.pc .phone{--z:.66}
+.pc2 .phone{border-color:var(--ink-raised)}
+/* all three cards: same phone height as the fridge round screen */
+.pc1 .screen,.pc3 .screen{height:860px}
+/* cards lift a little under a mouse pointer; touch screens and reduced motion keep them still */
+@media (hover:hover) and (prefers-reduced-motion:no-preference){
+  .pc{transition:transform .25s ease}
+  .pc:hover{transform:translateY(-8px)}
+  .pc .phone{transition:transform .35s ease}
+  .pc:hover .phone{transform:translateY(-6px)}
+}
+@media (min-width:390px){.pc .phone{--z:.7}}
+@media (min-width:420px){.pc .phone{--z:.74}}
+@media (min-width:760px){.pc .phone{--z:.66}}
+@media (min-width:980px){.pc .phone{--z:.8}}
+/* card 3: the same phone as cards 1 and 2; PDF page 1 lies over its lower corner, below the heading and the ring.
+   --pcpb = the bottom padding of cards 1 and 2 (card 3 takes 1px less for its border), so the page rises from the card's bottom edge. */
+.pc3{--pcpb:32px;padding-bottom:calc(var(--pcpb) - 1px)}
+.pc3 .pc-vis{position:relative;align-self:center}
+.pc3 .pc-paper{position:absolute;z-index:2;right:4px;bottom:calc(1px - var(--pcpb));pointer-events:none}
+.pc3 .paper{--pz:.42;border:2px solid var(--line);border-bottom:0;box-shadow:0 -6px 20px rgba(14,42,44,.18)}
+@media (min-width:390px){.pc3 .pc-paper{right:-14px}.pc3 .paper{--pz:.45}}
+@media (min-width:420px){.pc3{--pcpb:36px}.pc3 .paper{--pz:.47}}
+/* 760-1099 px: card 3 spans the row; text on the left, phone on the right, the page reaches into the space below the text */
+@media (min-width:760px){
+  .pc3{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:32px}
+  .pc3 .pc-copy{grid-column:1;grid-row:1}
+  .pc3 .pc-vis{grid-column:2;grid-row:1;align-self:end}
+  .pc3 .pc-paper{right:calc(100% - 36px)}
+  .pc3 .paper{--pz:.54}
+}
+@media (min-width:980px){.pc3{--pcpb:48px;column-gap:56px}.pc3 .paper{--pz:.62}}
+/* gauge and status boxes (fridge round, how-it-works phone and the try-it card) */
+.deg{font-size:22px;font-weight:800;color:var(--m-muted);letter-spacing:-0.02em}
+.track{position:relative;height:28px;border-radius:20px;background:var(--quiet);border:2px solid var(--m-line-input)}
+.track .safe{position:absolute;left:0;top:0;bottom:0;width:50%;background:var(--wash);border-right:2px solid var(--teal);border-radius:9999px 0 0 9999px;display:flex;align-items:center;gap:4px;padding-left:8px;font-size:13px;font-weight:700;color:var(--teal-dark)}
+.track .tw{position:absolute;right:10px;top:0;bottom:0;display:flex;align-items:center;font-size:13px;font-weight:700;color:var(--warn-dark)}
+.track .mark{position:absolute;top:-8px;bottom:-8px;width:6px;margin-left:-3px;border-radius:3px;background:var(--ink);border:2px solid #FFFFFF;box-sizing:content-box}
+.five{text-align:center;font-size:13px;font-weight:700;color:var(--m-muted);margin-top:2px}
+.okline{padding:10px 12px;border-radius:28px;background:var(--wash);color:var(--teal-dark);font-weight:700;font-size:16px}
+/* signed temperature field: sign slot inside the border on the left, number, then °C (design-system 13) */
+.sfield{display:flex;align-items:center;gap:4px;height:64px;border:2px solid var(--m-line-input);border-radius:16px;background:#FFFFFF;padding:0 14px 0 6px}
+.sfield .sign{flex:none;width:48px;height:48px;border-radius:12px;border:1.5px solid var(--m-line-input);background:var(--m-icon);color:var(--ink);display:flex;align-items:center;justify-content:center;padding:0 0 3px;font-size:30px;line-height:1;font-weight:800}
+.sfield .sv{flex:1;min-width:0;padding-left:10px;font-size:32px;font-weight:800;letter-spacing:-0.02em}
+.sfield .sv.ph{color:#A3B5B2}
+.readback{font-size:15px;font-weight:700}
+/* fridge round */
+.fcard{background:var(--m-card);border:1px solid var(--m-edge);box-shadow:var(--m-shadow);border-radius:20px;padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px}
+.vcard{background:var(--m-card);border:1px solid var(--m-edge);box-shadow:var(--m-shadow);border-radius:20px;padding:14px 16px}
+.whorow{display:flex;align-items:center;gap:10px;min-height:48px;font-size:16px}
+.whorow b{font-weight:700}
+/* the who-row Change is a real outline button (contrast-a 5.3) */
+.whorow u{flex:none;display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:9999px;border:2px solid var(--m-btn2-edge);background:#FFFFFF;color:var(--ink);font-weight:700;font-size:15px;text-decoration:none}
+.timef{display:flex;align-items:center;gap:10px;padding-top:8px;border-top:1px solid #DDE6E4}
+.timef p{font-size:15px;font-weight:700}
+.timef .in{flex:1;height:48px;border:2px solid var(--m-line-input);border-radius:16px;display:flex;align-items:center;padding:0 14px;font-size:16px}
+.chk{background:var(--m-done);border:1px solid var(--m-edge);box-shadow:var(--m-shadow);border-radius:20px;padding:12px 14px 12px 16px;min-height:56px;display:flex;align-items:center;gap:10px}
+.chk .t{font-size:25px;color:var(--teal);font-weight:800;letter-spacing:-0.02em}
+.okp{display:inline-flex;align-items:center;padding:1px 8px;border-radius:20px;background:#FFFFFF;color:var(--teal-dark);font-weight:700;font-size:14px}
+.save{height:56px;border-radius:9999px;background:var(--teal);color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px}
+.save.off{background:var(--m-disabled);color:var(--m-muted)}
+/* freezer docket in the round (contrast-a crit. 5): the optional signed field first, then the filled Still frozen toggle
+   (ring mark = not pressed), then Not frozen or freezer fault as a neutral 48 px outline button */
+.fzname{font-size:18px;font-weight:700;letter-spacing:-0.01em}
+.flbl{font-size:15px;font-weight:700}
+.sfield.small{height:56px}
+.sfield.small .sv{font-size:28px}
+.hint{font-size:14px;line-height:1.35;color:var(--m-muted)}
+.fz{display:flex;align-items:center;justify-content:center;gap:10px;min-height:56px;border-radius:9999px;border:2px solid var(--teal);background:var(--teal);color:#FFFFFF;font-weight:700;font-size:17px}
+.fz .mk{flex:none;width:24px;height:24px;border-radius:12px;border:2.5px solid currentColor}
+.btn2{display:flex;align-items:center;justify-content:center;min-height:48px;padding:0 16px;border-radius:9999px;border:2px solid var(--m-btn2-edge);background:#FFFFFF;color:var(--ink);font-weight:700;font-size:15px;text-align:center}
+/* choice chips with a 2 px edge (contrast-a 5.4); the chosen one is ink */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{display:inline-flex;align-items:center;min-height:48px;padding:0 14px;border-radius:9999px;border:2px solid var(--m-chip-edge);background:#FFFFFF;font-size:15px;font-weight:700}
+.chips span.on{background:var(--ink);border-color:var(--ink);color:#FFFFFF}
+.lbl{font-size:16px;font-weight:700}
+.lnk{display:inline-flex;align-items:center;min-height:44px;font-size:15px;font-weight:700;color:var(--teal);text-decoration:underline;text-underline-offset:3px}
+.range{display:flex;align-items:center;gap:8px;min-height:48px}
+.range p{flex:1;font-size:16px;font-weight:700}
+.ans{display:flex;align-items:center;justify-content:center;min-height:56px;border-radius:9999px;font-weight:700;font-size:17px}
+.ans.ok{background:var(--teal);color:#FFFFFF}
+.ans.bad{border:2px solid var(--warn);background:#FFFFFF;color:var(--warn-dark)}
+/* History: Inspection day */
+.pbox{background:var(--ink);color:#FFFFFF;border-radius:20px;padding:16px;display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.psel{display:inline-flex;align-items:center;gap:12px;height:48px;padding:0 14px 0 16px;border-radius:9999px;border:2px solid #6F8E8C;background:var(--ink-raised);font-size:16px;font-weight:700;white-space:nowrap}
+.prange{font-size:15px;color:var(--muted-ink);white-space:nowrap}
+.prange b{color:#FFFFFF}
+.ringrow{display:flex;align-items:center;gap:14px}
+.ring{position:relative;width:84px;height:84px;flex:none}
+.ring b{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:22px;line-height:1;color:var(--teal);font-weight:800}
+.ring b small{font-size:13px;font-weight:400;color:var(--m-muted);margin-top:2px}
+.vh2{font-size:16px;font-weight:700;margin-bottom:2px}
+.vh2.q{color:var(--m-muted);margin-top:12px}
+.vh2.q span{font-weight:400;font-size:14px}
+.vr{display:flex;align-items:center;gap:10px;border-bottom:1px solid #DDE6E4;padding:7px 0;min-height:40px;font-size:15px}
+.vr span{flex:1}
+.vr b{font-size:18px;letter-spacing:-0.01em}
+.vr.q{color:var(--m-muted)}
+.vprob{display:flex;align-items:center;gap:10px;padding:10px 0 2px;font-size:15px;font-weight:700;color:var(--warn-dark)}
+/* PDF page 1 (verifier PDF, sample) */
+.paper{--pz:.6;flex:none;width:calc(460px * var(--pz));height:calc(560px * var(--pz));overflow:hidden;position:relative;border-radius:6px 6px 0 0;background:#FFFFFF;border:1px solid var(--edge);border-bottom:0}
+@media (min-width:390px){.paper{--pz:.66}}
+@media (min-width:420px){.paper{--pz:.7}}
+@media (min-width:760px){.paper{--pz:.7}}
+@media (min-width:980px){.paper{--pz:1}}
+.pdf{zoom:var(--pz);width:460px;padding:26px 30px;font-size:11px;line-height:1.35;color:#111111}
+.pdf .ph{display:flex;justify-content:space-between;gap:12px;font-size:9.5px;color:#555555;padding-bottom:14px}
+.pdf .ph em{font-style:normal;font-weight:700;color:var(--teal-dark);border:1.5px solid currentColor;border-radius:9999px;padding:0 6px}
+.pdf h4{margin:0 0 8px;font-size:20px;font-weight:700;letter-spacing:-0.01em}
+.pdf .meta p{margin:0}
+.pdf table{width:100%;border-collapse:collapse;margin:12px 0 10px;font-size:10.5px}
+.pdf th{text-align:left;font-weight:700;border-bottom:1.5px solid #111111;padding:3px 4px 3px 0}
+.pdf td{border-bottom:1px solid #DDDDDD;padding:3px 4px 3px 0}
+.pdf td.nc,.pdf th.nc{text-align:right;padding:3px 0 3px 10px;width:60px}
+.pdf .sum p{margin:0;font-weight:700}
+.pdf h5{margin:12px 0 4px;font-size:12px;font-weight:700}
+.pdf ol{list-style:none;margin:0;padding:0}
+.pdf ol li{display:flex;justify-content:space-between;gap:8px;padding:1px 0 1px 10px}
+
+/* paper problem */
+.pains{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:36px;padding:0;list-style:none}
+.pains li{display:flex;align-items:center;gap:16px;padding:18px 20px;border-radius:16px;background:var(--paper);font-weight:700;font-size:18px;line-height:1.3}
+.pains .x{flex:none;width:48px;height:48px;border-radius:9999px;background:var(--warn-tint);display:flex;align-items:center;justify-content:center}
+.turn{margin-top:28px;display:flex;align-items:center;gap:10px;font-weight:800;font-size:clamp(22px,3vw,30px);letter-spacing:-0.02em}
+
+/* how it works */
+.how{display:grid;gap:48px;align-items:center}
+@media (min-width:980px){.how{grid-template-columns:minmax(0,1fr) auto;gap:80px}}
+.steps{list-style:none;padding:0;margin:32px 0 0;display:flex;flex-direction:column;gap:14px}
+.steps li{display:flex;gap:18px;align-items:flex-start;padding:22px;border-radius:16px;background:var(--paper)}
+.step-n{flex:none;width:52px;height:52px;border-radius:9999px;background:var(--ink);color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:24px}
+.steps h3{font-size:22px;font-weight:800;letter-spacing:-0.02em;line-height:1.15}
+.steps p{margin-top:4px;color:var(--muted);font-size:17px}
+.how figure{display:flex;flex-direction:column;align-items:center}
+
+/* record grid */
+.grey{background:var(--band)}
+.tiles{list-style:none;padding:0;margin:36px 0 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.tiles li{display:flex;flex-direction:column;gap:12px;padding:22px;border-radius:16px;background:var(--paper)}
+/* record-type tiles (design-system 27); types without a pair keep the grey tile with a teal icon */
+.tiles .ti{width:56px;height:56px;border-radius:16px;background:var(--tb,var(--m-icon));display:flex;align-items:center;justify-content:center}
+.tiles .ti svg{stroke:var(--tf,#0B6B72)}
+.tiles h3{font-size:21px;font-weight:800;letter-spacing:-0.02em;line-height:1.15;display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.tiles p{font-size:16px;color:var(--muted);line-height:1.4}
+@media (max-width:599px){.tiles li{display:grid;grid-template-columns:auto 1fr;align-items:center;padding:14px 16px;column-gap:14px;row-gap:2px}.tiles .ti{grid-row:span 2;align-self:center}.tiles .ti{flex:none;width:48px;height:48px;border-radius:14px}.tiles h3{font-size:19px}.tiles p{font-size:15px;margin-top:2px}}
+.tiles .soon{background:transparent;border:2px dashed var(--line);box-shadow:none}
+.tiles .soon .ti{background:#FFFFFF}
+.tag-soon{font-size:13px;font-weight:700;padding:3px 10px;border-radius:9999px;background:var(--ink);color:#FFFFFF;letter-spacing:0}
+/* landing-polish: "Record optional" is plain muted text on its own line under the title on every card (app section 35 rule 4) */
+.tag-opt{display:block;font-size:15px;font-weight:700;line-height:1.3;letter-spacing:0;color:var(--muted)}
+
+/* what's due */
+.dueg{display:grid;gap:48px;align-items:center}
+@media (min-width:980px){.dueg{grid-template-columns:auto minmax(0,1fr);gap:96px}}
+.dueg figure{display:flex;flex-direction:column;align-items:center;order:2}
+@media (min-width:980px){.dueg figure{order:0}}
+.dlist{list-style:none;padding:0;margin:32px 0 0;display:flex;flex-direction:column;gap:10px}
+.dlist li{display:flex;align-items:center;gap:16px;min-height:72px;padding:12px 22px 12px 12px;border-radius:9999px;background:var(--ink-raised)}
+.dlist .di{flex:none;width:52px;height:52px;border-radius:9999px;background:var(--ink);display:flex;align-items:center;justify-content:center}
+.dlist b{display:block;font-size:19px;letter-spacing:-0.01em}
+.dlist span{display:block;font-size:15px;color:var(--muted-ink)}
+.ink .sub2{color:var(--muted-ink)}
+
+/* safekeeping */
+.keep{display:grid;gap:12px;margin-top:36px}
+@media (min-width:860px){.keep{grid-template-columns:1.2fr 1fr 1fr}}
+.keep .big4{grid-row:span 2;display:flex;flex-direction:column;justify-content:center;gap:28px;padding:28px;border-radius:20px;background:var(--wash);color:var(--ink)}
+.keep .big4 .yrs{font-weight:900;font-size:clamp(96px,14vw,168px);line-height:.8;letter-spacing:-0.06em;color:var(--teal)}
+.keep .big4 .yrs small{display:block;font-size:.26em;letter-spacing:-0.02em;text-transform:uppercase;margin-top:12px;color:var(--teal-dark)}
+.keep .k{display:flex;flex-direction:column;gap:12px;padding:24px;border-radius:16px;background:var(--paper)}
+.keep .k .ti{width:52px;height:52px;border-radius:16px;background:var(--m-icon);display:flex;align-items:center;justify-content:center}
+.keep h3{font-size:21px;font-weight:800;letter-spacing:-0.02em;line-height:1.15}
+@media (max-width:859px){.keep .k{display:grid;grid-template-columns:auto 1fr;column-gap:16px;row-gap:2px;padding:18px 20px}.keep .k .ti{grid-row:span 2}.keep .big4{flex-direction:row;align-items:center;padding:24px}.keep .big4 .yrs{font-size:96px}}
+.keep p{font-size:16px;color:var(--muted);line-height:1.4}
+.keep .big4 p{color:var(--ink);font-size:18px}
+
+/* call to action */
+.cta{background:var(--teal);color:#FFFFFF}
+.cta .inner{display:flex;flex-direction:column;gap:22px;align-items:flex-start}
+.cta p{max-width:620px}
+/* text links */
+.tlink{display:inline-flex;align-items:center;min-height:48px;padding:0 2px;color:#FFFFFF;font-weight:600;font-size:17px;text-decoration:underline;text-underline-offset:4px}
+.tlink:hover{color:var(--mint)}
+.hero .tlink{color:var(--muted-ink)}
+.hero .tlink:hover{color:#FFFFFF}
+.hero .btns{align-items:center;gap:12px 24px}
+.cta .tlink:hover{color:var(--wash)}
+.cta .more{display:flex;flex-direction:column;gap:6px;margin-top:-8px}
+.cta .ask{font-size:16px}
+.cta .ask a{display:inline-block;padding:12px 2px;margin:-12px -2px;color:#FFFFFF;font-weight:700}
+.cta .ask a:hover{color:var(--wash)}
+
+/* footer */
+footer{background:var(--ink);color:var(--muted-ink);font-size:15px}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px 40px;padding-top:40px;padding-bottom:48px}
+.foot .brand{font-size:20px}
+.foot ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:0 8px}
+.foot ul a{display:inline-flex;align-items:center;min-height:48px;padding:0 10px;color:#FFFFFF;font-weight:600}
+.foot ul a:hover{color:var(--mint)}
+.foot .fine{flex-basis:100%;border-top:1px solid var(--ink-raised);padding-top:20px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px}
+/* Variant: 3 cards in one row on wide screens; card 3 overlaps the PDF page on the phone */
+@media (min-width:1100px){
+  .pcards{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .pc{padding:40px 28px 44px}
+  .pc h3{font-size:clamp(30px,2.5vw,36px)}
+  .pc .phone{--z:.7}
+  .pc3{grid-column:auto;display:flex;--pcpb:44px;padding-bottom:calc(var(--pcpb) - 1px)}
+  .pc3 .pc-vis{align-self:center}
+  .pc3 .pc-paper{right:-14px}
+  .pc3 .paper{--pz:.45}
+}
+@media (min-width:1280px){.pc .phone{--z:.76}.pc3 .paper{--pz:.48}}
+/* Variant A: centred hero, no hero phone; the cards straddle the bottom edge of the dark band */
+.hero{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center;padding-top:40px}
+.hero-copy{align-items:center;padding-bottom:56px}
+.hero .sub,.for{margin-left:auto;margin-right:auto}
+.hero .btns{justify-content:center}
+@media (min-width:980px){.hero{grid-template-columns:minmax(0,1fr);padding-top:64px}.hero-copy{padding-bottom:72px}}
+header.ink{padding-bottom:140px}
+.pcards{position:relative;margin-top:-140px}
+@media (min-width:760px){header.ink{padding-bottom:300px}.pcards{margin-top:-300px}}
+@media (min-width:1100px){header.ink{padding-bottom:380px}.pcards{margin-top:-380px}}
+/* card 2 sits on the dark band, so it uses teal instead of the band colour */
+.pc2{background:var(--teal)}
+.pc2 .pc-copy p{color:#FFFFFF}
+.pc2 .phone{border-color:var(--ink)}
+
+/* Hero try-it card: a working copy of the fridge check (prototype Fridge.dc.html). Kitchen ink tokens only. */
+.hero{gap:28px}
+.hero-copy{padding-bottom:0}
+@media (min-width:980px){.hero-copy{padding-bottom:0}}
+.try{width:100%;max-width:420px;margin:0 auto}
+.tc{background:var(--m-bg);color:var(--ink);border-radius:20px;padding:12px;display:flex;flex-direction:column;gap:12px;text-align:left;font-size:16px;line-height:1.3}
+.tc :focus-visible{outline-color:var(--teal)}
+.tc-top{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;background:var(--m-card);border:1px solid var(--m-edge);box-shadow:var(--m-shadow);border-radius:20px;padding:12px 14px 14px 12px}
+.tc-top .cs{gap:8px}
+.tc-sample{margin:2px 8px -4px;font-size:13px;font-weight:600;color:var(--m-muted)}
+#try-count{white-space:nowrap}
+.tdots{display:inline-flex;gap:4px}
+.tdots i{width:12px;height:12px;border-radius:6px;border:2px solid var(--teal)}
+.tdots i.on{background:var(--teal)}
+.tbar{flex-basis:100%;height:8px;border-radius:9999px;background:var(--m-bg);overflow:hidden}
+.tbar span{display:block;height:100%;width:66.67%;background:var(--teal);border-radius:inherit}
+.tdock{background:var(--m-card);border:1px solid var(--m-edge);box-shadow:var(--m-shadow);border-radius:20px;padding:14px 14px 16px;display:flex;flex-direction:column;gap:10px}
+.tdock>label.ct{display:block}
+/* sign slot inside the field (design-system 13, as SignedTempField): + for fridges, tap toggles to − */
+.tfield{display:flex;align-items:center;gap:4px;height:64px;border:2px solid var(--m-line-input);border-radius:16px;background:#FFFFFF;padding:0 14px 0 6px}
+.tfield:focus-within{border-color:var(--teal);outline:3px solid var(--teal);outline-offset:1px}
+.tfield.bad{border-color:var(--warn)}
+.tfield.bad:focus-within{outline-color:var(--warn)}
+.tsign{flex:none;width:48px;height:48px;margin:0;border-radius:12px;border:1.5px solid var(--m-line-input);background:var(--m-icon);color:var(--ink);display:flex;align-items:center;justify-content:center;padding:0 0 3px;font:inherit;font-size:30px;line-height:1;font-weight:800;cursor:pointer;touch-action:manipulation}
+.tsign:hover{background:var(--wash)}
+.tin{flex:1;min-width:0;width:100%;height:100%;margin:0;padding:0 0 0 10px;border:0;border-radius:0;outline:0;background:transparent;color:var(--ink);text-align:left;font:inherit;font-size:32px;font-weight:800;letter-spacing:-0.02em}
+.tin::placeholder{color:#A3B5B2}
+.tin:focus-visible{outline:0}
+.trb{font-size:15px;font-weight:700}
+.trb:empty{display:none}
+.tgauge{padding-top:6px}
+.tgauge .five{margin-top:4px}
+.tgauge .mark[hidden]{display:none}
+.tstat{padding:10px 14px;border-radius:28px;font-weight:700;font-size:16px}
+.tstat.ok{background:var(--wash);color:var(--teal-dark)}
+.tstat.bad{background:var(--warn-tint);color:var(--warn-dark)}
+.tstat.none{background:var(--quiet);color:var(--m-muted)}
+.tact{display:flex;flex-direction:column;gap:6px}
+.tact[hidden]{display:none}
+.tact label{font-weight:700;font-size:15px}
+.tact textarea{width:100%;min-height:72px;margin:0;padding:10px 12px;border:2px solid var(--m-line-input);border-radius:16px;background:#FFFFFF;color:var(--ink);font:inherit;font-size:16px;resize:vertical}
+.tact textarea:focus{border-color:var(--teal)}
+.terr{padding:0 6px;font-size:15px;font-weight:700;color:var(--warn-dark)}
+.terr:empty{display:none}
+.tsave{min-height:56px;padding:0 20px;border-radius:9999px;border:2px solid var(--teal);background:var(--teal);color:#FFFFFF;font:inherit;font-weight:700;font-size:17px;cursor:pointer;touch-action:manipulation}
+.tsave:hover{background:var(--teal-dark);border-color:var(--teal-dark)}
+.tsave.done{background:var(--wash);color:var(--teal-dark);border-color:var(--teal)}
+@media (prefers-reduced-motion:no-preference){
+  .tbar span{transition:width .35s ease-out}
+  .tgauge .mark{transition:left .2s ease-out}
+  .tdots i{transition:background-color .2s}
+}
+.try figcaption{margin-top:12px;font-size:15px}
+.hero-more{display:flex;flex-direction:column;align-items:center;gap:8px;padding-bottom:56px}
+@media (min-width:980px){
+  .hero{grid-template-columns:minmax(0,1fr) 420px;grid-template-areas:"copy try" "more try";grid-template-rows:auto 1fr;column-gap:64px;row-gap:24px;justify-items:stretch;align-items:start;text-align:left;padding-top:64px}
+  .hero-copy{grid-area:copy;align-items:flex-start}
+  .hero .sub,.for{margin-left:0;margin-right:0}
+  .hero .btns{justify-content:flex-start}
+  .try{grid-area:try;margin:0}
+  .hero-more{grid-area:more;align-items:flex-start;padding-bottom:72px}
+  h1.display{font-size:clamp(64px,7.4vw,100px)}
+}
+
+/* ===================== Landing round 2 (docs/specs/landing-round-2.md, boards L1-L4) =====================
+   Everything below is new for round 2. The CSS above is the round 1 page moved out of index.html as is (crit. 25);
+   the #how, #kit and #due rules (.how, .dueg, .dlist) are no longer used on the landing and can be deleted by the coder
+   (.steps stays: the /help page uses it). */
+
+/* CSP-safe helpers that replace the old style="..." attributes */
+.sprite{position:absolute;width:0;height:0;overflow:hidden}
+.mt0{margin-top:0}.mt4{margin-top:4px}.mt14{margin-top:14px}.mt20{margin-top:20px}.mtn4{margin-top:-4px}
+.pt18{padding-top:18px}.pb24{padding-bottom:24px}.fs14{font-size:14px}
+.cd-track i.w92{width:92%;background:#0B6B72}.cd-track i.w64{width:64%;background:#08555B}.cd-track i.w61{width:61%;background:#08555B}
+.rt1{font-size:17px;font-weight:700;line-height:1.25}.rt2{margin-top:4px;font-size:15px;color:#43585A}
+.foot-id{display:flex;flex-direction:column;gap:6px}
+.foot .brand img{width:36px;height:36px}
+
+/* all three product cards: the same phone height (the fridge round screen) */
+.pc .screen{height:860px}
+
+
+/* header: current page in the nav */
+.nav a.link[aria-current="page"]{background:var(--ink-raised);text-decoration:underline;text-underline-offset:4px}
+
+/* hero kicker (crit. 7): a plain line above the H1 */
+.hero .kicker{color:var(--mint)}
+
+/* Kept safe: the Free line under the 4-years text (crit. 11) */
+.keep .big4 .txt{display:flex;flex-direction:column;gap:6px}
+.keep .big4 .free{font-size:16px;color:var(--muted)}
+
+/* ---------- Pricing (#pricing, crit. 12-14) ---------- */
+.plans{display:grid;gap:16px;margin-top:36px}
+@media (min-width:760px){.plans{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.plan{display:flex;flex-direction:column;gap:20px;padding:28px 22px 30px;border-radius:20px;min-width:0}
+@media (min-width:420px){.plan{padding:32px 28px 34px}}
+@media (min-width:980px){.plan{padding:40px 40px 44px}}
+.plan-free{background:var(--paper)}
+.plan-sm{background:var(--ink);color:#FFFFFF}
+.plan h3{font-size:26px;font-weight:900;letter-spacing:-0.03em;line-height:1.1}
+.price{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.price b{font-weight:900;font-size:clamp(48px,7vw,72px);line-height:1;letter-spacing:-0.045em}
+.price span{font-size:18px;font-weight:700;color:var(--muted)}
+.plan-sm .price span{color:var(--muted-ink)}
+.alt{font-size:17px;color:var(--muted);margin-top:-10px;min-height:26px}
+.plan-sm .alt{color:var(--muted-ink)}
+.plan-sm .alt b{color:#FFFFFF}
+.feats{list-style:none;margin:0;padding:18px 0 0;display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--divider)}
+.plan-sm .feats{border-top-color:#4D7072}
+.feats li{display:flex;align-items:flex-start;gap:12px;font-size:17px;font-weight:600;line-height:1.35}
+.feats .fi{flex:none;width:28px;height:28px;border-radius:9999px;display:flex;align-items:center;justify-content:center;background:var(--wash);color:var(--teal-dark)}
+.plan-sm .feats .fi{background:var(--ink-raised);color:var(--mint)}
+/* "not included" uses a neutral dash and its own words, never orange: a plan limit is not a problem */
+.feats li.no{font-weight:400;color:var(--muted)}
+.feats li.no .fi{background:var(--quiet);color:var(--muted);border:1.5px solid var(--edge)}
+.start{margin-top:48px;display:flex;flex-direction:column;gap:20px}
+.start h3{font-size:26px;font-weight:900;letter-spacing:-0.03em;line-height:1.1}
+.startl{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+@media (min-width:980px){.startl{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.startl li{display:flex;align-items:flex-start;gap:14px;padding:18px 20px;border-radius:16px;background:var(--paper);font-size:17px;font-weight:600;line-height:1.35}
+.startl .sn{flex:none;width:40px;height:40px;border-radius:9999px;background:var(--ink);color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:19px}
+.start .btns{margin-top:8px}
+.note{display:flex;align-items:center;gap:12px;max-width:640px;font-size:16px;line-height:1.4;color:var(--ink)}
+.note .ni{flex:none;width:40px;height:40px;border-radius:12px;background:var(--m-icon);display:flex;align-items:center;justify-content:center}
+.note a{display:inline-block;padding:12px 0;margin:-12px 0;font-weight:700;overflow-wrap:anywhere}
+.note.founders{padding:12px 16px;border-radius:16px;background:var(--paper)}
+
+/* ---------- Why we built SousMate (optional; only built when config/site/story.md has text) ---------- */
+.story{padding-top:64px;padding-bottom:64px}
+@media (min-width:980px){.story{padding-top:96px;padding-bottom:96px}}
+.story .in{max-width:760px;display:flex;flex-direction:column;gap:16px}
+/* 2026-11-05: the owner's story is ~95 words, so body-size reading text, not a bold pull quote. */
+.story blockquote{margin:0;font-size:clamp(18px,1.6vw,21px);line-height:1.6;font-weight:500}
+.story blockquote p+p{margin-top:16px}
+.story .by{font-size:16px;color:var(--muted);font-weight:600}
+
+/* ---------- /help (crit. 15-18) ---------- */
+.help-hd{padding-bottom:48px}
+.help-copy{display:flex;flex-direction:column;gap:16px;padding-top:32px}
+@media (min-width:980px){.help-hd{padding-bottom:72px}.help-copy{padding-top:56px}}
+.help-hd h1.display{font-size:clamp(56px,12vw,112px)}
+.help-hd .sub{color:var(--muted-ink);max-width:620px}
+.helpg{display:grid;gap:56px}
+@media (min-width:980px){.helpg{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:64px;align-items:start}}
+.helpg h2{font-size:clamp(30px,4vw,40px);font-weight:900;letter-spacing:-0.035em;line-height:1.05;text-transform:uppercase}
+.helpg .steps{margin-top:24px;gap:10px}
+.helpg .steps li{padding:16px 18px;gap:14px;align-items:center}
+.helpg .step-n{width:44px;height:44px;font-size:20px}
+.helpg .steps h3{font-size:19px}
+.helpg .steps p{font-size:16px;margin-top:2px}
+.helpg .steps li.end{background:var(--wash)}
+.helpg .steps li.end .step-n{background:var(--teal)}
+.joinn{margin-top:16px;display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:16px;background:var(--paper);font-size:16px;line-height:1.4}
+.joinn .ni{flex:none;width:44px;height:44px;border-radius:14px;background:var(--m-icon);display:flex;align-items:center;justify-content:center}
+.faq{margin-top:24px;display:flex;flex-direction:column;gap:10px}
+.faq details{background:var(--paper);border-radius:16px}
+.faq summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:60px;padding:12px 14px 12px 20px;font-size:18px;font-weight:700;line-height:1.3;cursor:pointer;list-style:none;border-radius:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary .chev{flex:none;width:36px;height:36px;border-radius:9999px;border:2px solid var(--btn2-edge);display:flex;align-items:center;justify-content:center}
+.faq details[open] summary .chev svg{transform:rotate(180deg)}
+.faq details[open] summary{border-bottom:1px solid var(--divider);border-radius:16px 16px 0 0}
+.faq .a{padding:14px 20px 18px;font-size:17px;line-height:1.5;color:var(--ink)}
+.faq .a p+p{margin-top:8px}
+.faq .a a{font-weight:700;overflow-wrap:anywhere}
+@media (prefers-reduced-motion:no-preference){.faq summary .chev svg{transition:transform .15s}}
+
+/* Card 3 (crit. 24): below 760 px and from 1100 px the phone column fills the card's content box, as in cards 1 and 2,
+   so the centred phone no longer pushes the card's scroll width past its client width (nothing was cut, but the test
+   measure failed by 3-20 px). 760-1099 px keeps the grid layout above. */
+@media (max-width:759px),(min-width:1100px){.pc3 .pc-vis{align-self:stretch;display:flex;justify-content:center}}
+
+/* inline text links: 48 px tall tap area without moving the text */
+.note a{padding:13px 0;margin:-13px 0}
+.faq .a a{display:inline-block;padding:12px 0;margin:-12px 0}
+
+/* the Free card has no second price line: on phones the empty line folds away; side by side it keeps the two prices level */
+@media (max-width:759px){.alt:empty{display:none}}
+
+/* /help header: no product cards hang over it, so it drops the landing header's 140-380 px bottom room */
+header.ink.help-hd{padding-bottom:48px}
+@media (min-width:980px){header.ink.help-hd{padding-bottom:72px}}
+
+/* landing-polish crit. 12: the yearly saving reads as part of the yearly line (same colour and size, no badge); the
+   bracket never splits from its amount */
+.alt .ysave{white-space:nowrap}
+
+/* ===================== Phone mock-ups in the 0.25 look (landing-mockups, 2026-11-07) =====================
+   The three product-card phones show the app as shipped in APP 0.25.2 (live demo): design-system 35 (Atkinson
+   Hyperlegible Next for app text with tabular figures, lists as one white surface with warm dividers, line icons without
+   tiles, state tags as plain words, the warning triangle instead of "!"), 36 (tonal buttons with a 1 px tonal edge,
+   flat list rows) and reminders-align. Scoped to .screen, so the try-it card and the marketing look (section 37) are
+   untouched. The PDF page (.paper) keeps Inter, as the real verifier PDF does. Supersedes the older mock-up rules above. */
+:root{--m-tonal:#E0D9C9;--m-tonal-edge:#7A7262;--m-divider:#E6E1D6;--m-surface-r:16px;--m-cd-track:#E3EBE9;--m-cd-edge:#DDE6E4}
+.screen{font-family:'Atkinson Hyperlegible Next',system-ui,-apple-system,'Segoe UI',sans-serif;font-variant-numeric:tabular-nums}
+.screen .hd-title,.screen .sub-title{font-weight:800;letter-spacing:-0.02em}
+.screen .h2s{font-size:18px;font-weight:800;letter-spacing:0}
+/* the back link on ink: plain mint text (35 rule 6) */
+.screen .back{font-size:16px;font-weight:700;color:var(--mint)}
+.screen .back svg{stroke:var(--mint)}
+/* fridge round: Checked today and To check are list surfaces; the freezer help line is the first row of To check */
+.screen .chk{background:var(--m-card);border:0;box-shadow:none;border-radius:var(--m-surface-r)}
+.screen .okp{background:var(--wash);color:var(--teal-dark);border-radius:9999px}
+.screen .fcard{border:0;box-shadow:none;border-radius:var(--m-surface-r);padding:0;gap:0}
+.screen .fzhelp{padding:12px 16px}
+.screen .fzrow{display:flex;flex-direction:column;gap:10px;padding:14px 16px 16px;border-top:1px solid var(--m-divider)}
+.screen .sfield .sign{border-width:1px}
+.screen .btn2{min-height:56px;background:var(--m-tonal);border:1px solid var(--m-tonal-edge);font-size:16px}
+/* Reminders > Dates: one surface, rows split by the warm divider; teal line icons, no tile; tags are plain words */
+.screen .m-list{background:var(--m-card);border-radius:var(--m-surface-r);overflow:hidden}
+.screen .due{background:transparent;border:0;box-shadow:none;border-radius:0}
+.screen .due+.due{border-top:1px solid var(--m-divider)}
+.screen .ico{background:transparent}
+.screen .ico svg{stroke:var(--teal)}
+.screen .tag{padding:0;border:0;background:none}
+.screen .tag.up{color:var(--teal)}
+.screen .tag.good{background:none;color:var(--teal-dark)}
+.screen .pen{width:48px;height:48px;margin:-8px 0;border:1px solid var(--m-tonal-edge);background:var(--m-tonal)}
+.screen .cd-track{background:var(--m-cd-track);box-shadow:inset 0 0 0 1px var(--m-cd-edge)}
+/* History > Inspection day: the period select sits on the page (tonal, the 2 px input edge every select keeps), surfaces
+   without an edge, warm dividers, the problems line (each with what was done) in ink with the triangle */
+.screen .pbox{background:transparent;color:var(--ink);border-radius:0;padding:0;gap:10px}
+.screen .psel{background:var(--m-tonal);border-color:var(--m-line-input);color:var(--ink)}
+.screen .psel svg{stroke:var(--ink)}
+.screen .prange{padding-left:14px;color:var(--ink);font-weight:700}
+.screen .prange b{color:var(--ink)}
+.screen .vcard{border:0;box-shadow:none;border-radius:var(--m-surface-r)}
+.screen .ring circle:first-child{stroke:var(--m-bg)}
+.screen .vr{border-bottom-color:var(--m-divider);padding:0;min-height:48px}
+.screen .vprob{color:var(--ink)}

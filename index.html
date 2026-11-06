@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<title>SousMate: food safety records for NZ kitchens</title>
+<meta name="description" content="Food safety records for New Zealand kitchens. Record checks as you go, see what's due, and be ready for your verifier. Works offline.">
+<link rel="canonical" href="https://sousmate.co.nz/">
+<meta name="theme-color" content="#0E2A2C">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SousMate">
+<meta property="og:title" content="SousMate: less paperwork, more cooking">
+<meta property="og:description" content="Record checks as you go, see what's due, and be ready for your verifier. On phone, tablet or PC, even offline.">
+<meta property="og:url" content="https://sousmate.co.nz/">
+<meta property="og:locale" content="en_NZ">
+<meta property="og:image" content="https://sousmate.co.nz/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="SousMate: Less paperwork. More cooking. A phone showing the Today screen with checks still to do and done.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://sousmate.co.nz/og-image.png">
+<meta name="twitter:image:alt" content="SousMate: Less paperwork. More cooking. A phone showing the Today screen with checks still to do and done.">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/site.css">
+<script type="application/ld+json">{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Organization",
+   "@id": "https://sousmate.co.nz/#org",
+   "name": "SousMate",
+   "url": "https://sousmate.co.nz/",
+   "email": "hello@sousmate.co.nz",
+   "areaServed": "NZ"
+  },
+  {
+   "@type": "SoftwareApplication",
+   "name": "SousMate",
+   "url": "https://sousmate.co.nz/",
+   "applicationCategory": "BusinessApplication",
+   "operatingSystem": "Web browser (phone, tablet, PC); works offline",
+   "description": "Food safety records for New Zealand kitchens. Record checks as you go, see what's due, and be ready for your verifier.",
+   "publisher": {
+    "@id": "https://sousmate.co.nz/#org"
+   },
+   "areaServed": "NZ",
+   "offers": [
+    {
+     "@type": "Offer",
+     "name": "Free",
+     "price": "0.00",
+     "priceCurrency": "NZD"
+    },
+    {
+     "@type": "Offer",
+     "name": "Monthly",
+     "price": "19.99",
+     "priceCurrency": "NZD",
+     "priceSpecification": {
+      "@type": "UnitPriceSpecification",
+      "price": "19.99",
+      "priceCurrency": "NZD",
+      "unitCode": "MON"
+     }
+    },
+    {
+     "@type": "Offer",
+     "name": "Yearly",
+     "price": "199.00",
+     "priceCurrency": "NZD",
+     "priceSpecification": {
+      "@type": "UnitPriceSpecification",
+      "price": "199.00",
+      "priceCurrency": "NZD",
+      "unitCode": "ANN"
+     }
+    }
+   ]
+  }
+ ]
+}</script>
+</head>
+<body>
+<svg class="sprite" width="0" height="0" aria-hidden="true">
+  <defs>
+    <symbol id="i-fridge" viewBox="0 0 24 24"><path d="M7 2.5h10a2 2 0 012 2v15a2 2 0 01-2 2H7a2 2 0 01-2-2v-15a2 2 0 012-2zM5 9.5h14M8.5 5.5v1.5M8.5 12.5v3"/></symbol>
+    <symbol id="i-cooking" viewBox="0 0 24 24"><path d="M5 10.5h14v6.5a3 3 0 01-3 3H8a3 3 0 01-3-3zM3 10.5h18M10 7.5h4M2.5 13h2.5M19 13h2.5M9 3.5v1.5M12 3v2M15 3.5v1.5"/></symbol>
+    <symbol id="i-cooling" viewBox="0 0 24 24"><path d="M8 14.5V5a2 2 0 014 0v9.5a3.5 3.5 0 11-4 0zM10 9.5v7M18 4v11M15.5 12.5L18 15l2.5-2.5"/></symbol>
+    <symbol id="i-delivery" viewBox="0 0 24 24"><path d="M2 5.5h11v10H2zM13 8.5h4.2l3.3 3.5v3.5H13M4.5 17.5a2 2 0 104 0a2 2 0 10-4 0M14.5 17.5a2 2 0 104 0a2 2 0 10-4 0"/></symbol>
+    <symbol id="i-hothold" viewBox="0 0 24 24"><path d="M3 13h18M5 13v4.5a2 2 0 002 2h10a2 2 0 002-2V13M8 4.5c-1 1.2 1 2.3 0 3.5M12 4.5c-1 1.2 1 2.3 0 3.5M16 4.5c-1 1.2 1 2.3 0 3.5"/></symbol>
+    <symbol id="i-problem" viewBox="0 0 24 24"><path d="M10.3 3.9L2.4 18a2 2 0 001.7 3h15.8a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0zM12 9v4.5M12 17v.5"/></symbol>
+    <symbol id="i-warn" viewBox="0 0 24 24"><path d="M10.3 4.2L2.6 17.5A2 2 0 004.3 20.5h15.4a2 2 0 001.7-3L13.7 4.2a2 2 0 00-3.4 0zM12 9.5v4.5M12 17.2v.3"/></symbol>
+    <symbol id="i-training"viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5zM6 11v5c0 1.6 2.7 3 6 3s6-1.4 6-3v-5M22 9v5"/></symbol>
+    <symbol id="i-registration" viewBox="0 0 24 24"><path d="M6 2.5h8.5L19 7v14.5H6zM14.5 2.5V7H19M9 12h7M9 16h5"/></symbol>
+    <symbol id="i-recall" viewBox="0 0 24 24"><path d="M3.5 8L12 3.5 20.5 8v8L12 20.5 3.5 16zM3.5 8L12 12.5 20.5 8M12 12.5v8"/></symbol>
+    <symbol id="i-verify" viewBox="0 0 24 24"><path d="M10.5 18a7.5 7.5 0 110-15 7.5 7.5 0 010 15zM16 16l5 5M7.5 10.5l2 2 4-4"/></symbol>
+    <symbol id="i-thermo" viewBox="0 0 24 24"><path d="M10 14.5V5a2 2 0 014 0v9.5a3.5 3.5 0 11-4 0zM12 9.5v7"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><path d="M5.5 5h13a2 2 0 012 2v11.5a2 2 0 01-2 2h-13a2 2 0 01-2-2V7a2 2 0 012-2zM3.5 10h17M8 3v4M16 3v4"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 0112 0v5l1.5 2h-15zM10 20.5a2 2 0 004 0"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><path d="M12 21a9 9 0 100-18 9 9 0 000 18zM12 7v5l3 2"/></symbol>
+    <symbol id="i-snow" viewBox="0 0 24 24"><path d="M12 2.5v19M3.8 7.25l16.4 9.5M3.8 16.75l16.4-9.5M9.5 4.5L12 7l2.5-2.5M9.5 19.5L12 17l2.5 2.5M4.6 10.4l3.4.9-.9 3.4M19.4 13.6l-3.4-.9.9-3.4M7.1 9.3l-.9-3.4M16.9 14.7l.9 3.4"/></symbol>
+    <symbol id="i-wheat" viewBox="0 0 24 24"><path d="M12 21.5V9M12 9c-2.5 0-4-1.8-4-4.5 2.5 0 4 1.8 4 4.5zM12 9c2.5 0 4-1.8 4-4.5-2.5 0-4 1.8-4 4.5zM12 14c-2.5 0-4-1.8-4-4.5 2.5 0 4 1.8 4 4.5zM12 14c2.5 0 4-1.8 4-4.5-2.5 0-4 1.8-4 4.5zM12 19c-2.5 0-4-1.8-4-4.5 2.5 0 4 1.8 4 4.5zM12 19c2.5 0 4-1.8 4-4.5-2.5 0-4 1.8-4 4.5z"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 21.5a6.5 6.5 0 006.5-6.5c0-4-3-6.5-4-10-2 1.5-3 3.5-3 5.5-1-.5-2-1.8-2.2-3.2C7.2 9.5 5.5 12 5.5 15a6.5 6.5 0 006.5 6.5zM12 21.5a2.8 2.8 0 01-2.8-2.8c0-2 2.8-4 2.8-4s2.8 2 2.8 4a2.8 2.8 0 01-2.8 2.8z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol>
+    <symbol id="i-team" viewBox="0 0 24 24"><path d="M9 11a3.5 3.5 0 100-7 3.5 3.5 0 000 7zM2.5 20a6.5 6.5 0 0113 0M16 4.3a3.5 3.5 0 010 6.4M18 13.5a6.5 6.5 0 013.5 6"/></symbol>
+    <symbol id="i-today" viewBox="0 0 24 24"><path d="M4 6l1.5 1.5L8 5M4 12l1.5 1.5L8 11M4 18l1.5 1.5L8 17M11 6.5h9M11 12.5h9M11 18.5h9"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><path d="M6 11h12v10H6zM8.5 11V7.5a3.5 3.5 0 017 0V11"/></symbol>
+    <symbol id="i-history" viewBox="0 0 24 24"><path d="M4 12a8 8 0 102.4-5.7M4 3.5v4.5h4.5M12 8v4l2.5 2"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></symbol>
+    <symbol id="i-chev-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><path d="M3.5 5.5h17v13h-17zM3.5 6l8.5 7 8.5-7"/></symbol>
+    <symbol id="i-wifioff" viewBox="0 0 24 24"><path d="M3 3l18 18M8.5 16.5a5 5 0 017 0M5 12.5a10 10 0 015-2.6M14.5 10a10 10 0 014.5 2.5M2 8.8a15 15 0 014.5-2.9M11 5a15 15 0 0111 3.8M12 20h.01"/></symbol>
+    <symbol id="i-devices" viewBox="0 0 24 24"><path d="M3 5h13v9H3zM1.5 17h16M18 9h4v11h-4zM20 17.5h.01"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3.5v5c0 5-3.5 8.3-8 9.5-4.5-1.2-8-4.5-8-9.5v-5zM8.5 12l2.5 2.5 4.5-5"/></symbol>
+    <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 00-4-4L4 16zM13.5 6.5l4 4"/></symbol>
+    <symbol id="i-wet" viewBox="0 0 24 24"><path d="M12 3s6 6.5 6 11a6 6 0 01-12 0c0-4.5 6-11 6-11z"/></symbol>
+    <symbol id="i-paper" viewBox="0 0 24 24"><path d="M6 2.5h8.5L19 7v14.5H6zM14.5 2.5V7H19M9 12h7M9 16h5"/></symbol>
+    <symbol id="i-clean" viewBox="0 0 24 24"><path d="M11 3l1.9 4.6L17.5 9.5l-4.6 1.9L11 16l-1.9-4.6L4.5 9.5l4.6-1.9zM18 14.5l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z"/></symbol>
+    <symbol id="i-service" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 00-5.4 5.2L3.5 17.3a1.8 1.8 0 002.5 2.5l5.8-5.8a4 4 0 005.2-5.4l-2.6 2.6-2.3-.4-.4-2.3z"/></symbol>
+    <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 4v15M7 19.5h10M5 7.5h14M5 7.5l-2.5 6a2.5 2.5 0 005 0zM19 7.5l-2.5 6a2.5 2.5 0 005 0z"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6zM19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></symbol>
+    <symbol id="i-person" viewBox="0 0 24 24"><path d="M12 12a4 4 0 100-8 4 4 0 000 8zM4.5 21a7.5 7.5 0 0115 0"/></symbol>
+  </defs>
+</svg>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="ink">
+  <div class="wrap top">
+    <a class="brand" href="#top" aria-label="SousMate, back to top">
+      <img src="/icon.svg" alt="" width="40" height="40">
+      <span>Sous<span class="mint">Mate</span></span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a class="link" href="#records">Records</a>
+      <a class="link" href="#pricing">Pricing</a>
+      <a class="link" href="/help/">Help</a>
+      <a class="link signin" href="https://app.sousmate.co.nz/#setup/signin">Sign in</a>
+      <a class="btn btn-mint" href="https://demo.sousmate.co.nz/">Free demo</a>
+    </nav>
+  </div>
+
+  <div class="wrap hero" id="top">
+    <div class="hero-copy">
+      <p class="kicker">Food safety records for New Zealand kitchens</p>
+      <h1 class="display">Less paperwork.<br><span class="mint">More cooking.</span></h1>
+      <p class="lead sub">Record checks as you go, see what's due, and be ready for your verifier. On phone, tablet or PC, even offline.</p>
+      <div class="btns">
+        <a class="btn btn-mint" href="https://demo.sousmate.co.nz/">Try the free demo
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+
+    <figure class="try">
+      <div class="tc" role="group" aria-labelledby="try-h">
+        <p class="tc-sample">Prototype with sample data</p>
+        <div class="tc-top">
+          <span class="ico t-fridge"><svg width="24" height="24" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-fridge"/></svg></span>
+          <div class="grow">
+            <p class="ct" id="try-h">Fridges</p>
+            <p class="cs"><span class="tdots" aria-hidden="true"><i class="on"></i><i class="on"></i><i id="try-dot3"></i></span><span id="try-count" aria-live="polite">2 of 3 checked</span></p>
+          </div>
+          <div class="tbar" aria-hidden="true"><span id="try-bar"></span></div>
+        </div>
+        <div class="tdock" id="try-dock">
+          <label class="ct" for="try-temp" id="try-name">Fridge 1</label>
+          <div class="tfield" id="try-field">
+            <button type="button" class="tsign" id="try-sign" aria-label="Change to minus" aria-describedby="try-name">+</button>
+            <input class="tin" id="try-temp" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="0.0" value="3.5" aria-describedby="try-rb try-status">
+            <span class="deg" aria-hidden="true">°C</span>
+          </div>
+          <p class="trb" id="try-rb" role="status">Reading: 3.5°C</p>
+          <div class="tgauge" aria-hidden="true">
+            <div class="track"><span class="safe"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><use href="#i-check"/></svg>Safe</span><span class="tw">! Too warm</span><span class="mark" id="try-mark"></span></div>
+            <p class="five">5°C</p>
+          </div>
+          <p class="tstat ok" id="try-status" role="status">✓ OK — 5°C or lower</p>
+          <div class="tact" id="try-act" hidden>
+            <label for="try-what">What did you do about Fridge 1? (required)</label>
+            <textarea id="try-what" rows="2"></textarea>
+          </div>
+        </div>
+        <p class="terr" id="try-err" role="alert"></p>
+        <button type="button" class="tsave" id="try-save">Save 1 reading</button>
+      </div>
+      <figcaption>Works like the fridge check in the app. Try a temperature. Nothing is saved.</figcaption>
+    </figure>
+
+    <div class="hero-more">
+      <p class="for">For New Zealand cafés, bakeries, food trucks, fish &amp; chip shops and home kitchens on the MPI Simply Safe &amp; Suitable template or National Programme 2.</p>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <section id="product" aria-labelledby="product-h">
+    <h2 class="vh" id="product-h">What SousMate does</h2>
+    <div class="wrap pcards">
+
+      <article class="pc pc1" aria-labelledby="pc1-h">
+        <div class="pc-copy">
+          <h3 id="pc1-h">Record as you go</h3>
+          <p>Walk round once: every fridge and freezer is on one screen. Type the °C or tap Still frozen ✓, then save once. It says OK or Too warm in plain words, and keeps who checked it and when.</p>
+        </div>
+        <figure class="pc-vis">
+          <div class="phone" role="img" aria-label="The fridge round screen with sample data, scrolled down: Fridges, chillers and freezers, safe at 5°C or colder. Checked today: Walk-in chiller, Mia at 07:12, 3.4°, OK. To check: Ice-cream freezer, with the help line Saved as measured, SousMate does not judge a freezer temperature. Its optional Food temperature field is empty with the minus sign, then the filled button Still frozen, then the outline button Not frozen or freezer fault. The Save button waits: Enter a temperature.">
+            <div class="screen round" aria-hidden="true">
+              <div class="hd">
+                <div class="sub-top"><span class="back"><svg width="20" height="20" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-back"/></svg>Today</span><span class="hd-proto">Prototype with sample data</span></div>
+                <p class="sub-title">Fridges, chillers and freezers</p>
+                <div class="rule"><b><svg width="20" height="20" fill="none" stroke="#8EE6C9" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-thermo"/></svg>Safe: 5°C or colder</b><u>How to check</u></div>
+              </div>
+              <div class="sb">
+                <p class="h2s mt4">Checked today</p>
+                <div class="chk"><div class="grow"><p class="ct">Walk-in chiller</p><p class="cs fs14">Mia · 07:12</p></div><p class="t">3.4°</p><span class="okp">✓ OK</span></div>
+                <p class="h2s mt4">To check</p>
+                <div class="fcard">
+                  <p class="hint fzhelp">Saved as measured. SousMate does not judge a freezer temperature.</p>
+                  <div class="fzrow">
+                    <p class="fzname">Ice-cream freezer</p>
+                    <p class="flbl">Food temperature (optional)</p>
+                    <div class="sfield small mtn4"><span class="sign">−</span><span class="sv ph">0.0</span><span class="deg">°C</span></div>
+                    <div class="fz"><span class="mk"></span>Still frozen ✓</div>
+                    <div class="btn2">Not frozen or freezer fault</div>
+                  </div>
+                </div>
+              </div>
+              <div class="sdock">
+                <div class="save off">Enter a temperature</div>
+                <div class="snav"><span class="on"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-today"/></svg>Today</span><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-bell"/></svg>Reminders</span><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-history"/></svg>History</span><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-gear"/></svg>Settings</span></div>
+              </div>
+            </div>
+          </div>
+        </figure>
+      </article>
+
+      <article class="pc pc2" aria-labelledby="pc2-h">
+        <div class="pc-copy">
+          <h3 id="pc2-h">Know what's due</h3>
+          <p>See what's left to check today, and what's coming up: registration renewal, your verification visit, staff training, recall test and equipment checks on your own schedule. Add each date once and SousMate counts down.</p>
+        </div>
+        <figure class="pc-vis">
+          <div class="phone" role="img" aria-label="The Reminders tab for Sample Café, scrolled to Your dates, with sample dates, each with a countdown bar: registration ends in 28 days, coming up, registered 21 Nov 2025, ends 21 Nov 2026; mock recall in 130 days, all good, last test 3 Mar 2026, due 3 Mar 2027; next verification in 142 days, all good, last visit 14 Mar 2026, next 15 Mar 2027. The bottom bar shows Today, Reminders, History and Settings, with Reminders selected.">
+            <div class="screen" aria-hidden="true">
+              <div class="hd">
+                <p class="hd-proto">Prototype with sample data</p>
+                <div class="hd-top"><div class="hd-lines"><p class="hd-shop">Sample Café</p><p class="hd-date">Saturday 24 October</p></div></div>
+                <p class="hd-title">Reminders</p>
+              </div>
+              <div class="sb pt18">
+                <p class="h2s mt0">Dates</p>
+                <div class="m-list">
+                <div class="due">
+                  <div class="row"><span class="ico t-reg"><svg width="26" height="26" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-registration"/></svg></span><div class="dtl"><p class="ct">Registration ends</p><span class="tag up">Coming up</span></div><span class="why">Why?</span><span class="pen"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-pen"/></svg></span></div>
+                  <p class="numrow"><span class="num">28</span><span>days left · renew</span></p>
+                  <div class="cd"><div class="cd-track"><i class="w92"></i></div><p class="cd-lbl"><span>Registered <b>21 Nov 2025</b></span><span>Ends <b>21 Nov 2026</b></span></p></div>
+                </div>
+                <div class="due">
+                  <div class="row"><span class="ico t-cooking"><svg width="26" height="26" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-recall"/></svg></span><div class="dtl"><p class="ct">Mock recall</p><span class="tag good">✓ All good</span></div><span class="why">Why?</span></div>
+                  <p class="numrow"><span class="num">130</span><span>days to go</span></p>
+                  <div class="cd"><div class="cd-track"><i class="w64"></i></div><p class="cd-lbl"><span>Last test <b>3 Mar 2026</b></span><span>Due <b>3 Mar 2027</b></span></p></div>
+                </div>
+                <div class="due">
+                  <div class="row"><span class="ico t-cooling"><svg width="26" height="26" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-verify"/></svg></span><div class="dtl"><p class="ct">Next verification</p><span class="tag good">✓ All good</span></div><span class="why">Why?</span><span class="pen"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-pen"/></svg></span></div>
+                  <p class="numrow"><span class="num">142</span><span>days to go</span></p>
+                  <div class="cd"><div class="cd-track"><i class="w61"></i></div><p class="cd-lbl"><span>Last visit <b>14 Mar 2026</b></span><span>Next <b>15 Mar 2027</b></span></p></div>
+                </div>
+                </div>
+              </div>
+              <div class="sdock">
+                <div class="snav"><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-today"/></svg>Today</span><span class="on"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-bell"/></svg>Reminders</span><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-history"/></svg>History</span><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-gear"/></svg>Settings</span></div>
+              </div>
+            </div>
+          </div>
+        </figure>
+      </article>
+
+      <article class="pc pc3" aria-labelledby="pc3-h">
+        <div class="pc-copy">
+          <h3 id="pc3-h">Ready for your verifier</h3>
+          <p>Open Inspection day and hand over one PDF. Page 1 sums up every record type, the days a fridge wasn't checked and any problems, with page numbers for the rest.</p>
+        </div>
+        <figure class="pc-vis">
+          <div class="phone" role="img" aria-label="The History tab on Inspection day, with sample data. Period: Since last visit, 14 Mar, so 14 Mar to 24 Oct 2026. Every fridge check done on 216 of 225 days. Required records: fridge checks 666, poultry, mince, liver 268, cooling batches 38, deliveries 97, training records 2. 3 problems, each with what was done. Optional records kept: other cooking 144, hot holding 305.">
+            <div class="screen" aria-hidden="true">
+              <div class="hd">
+                <p class="hd-proto">Prototype with sample data</p>
+                <div class="hd-top"><div class="hd-lines"><p class="hd-shop">Sample Café</p><p class="hd-date">Saturday 24 October</p></div></div>
+                <p class="hd-title">History</p>
+              </div>
+              <div class="sb pt18">
+                <p class="h2s mt0">Inspection day</p>
+                <div class="pbox">
+                  <span class="psel">Since last visit · 14 Mar<svg width="20" height="20" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chev-down"/></svg></span>
+                  <p class="prange"><b>14 Mar</b> – <b>24 Oct 2026</b></p>
+                </div>
+                <div class="vcard ringrow">
+                  <div class="ring">
+                    <svg width="84" height="84" viewBox="0 0 92 92"><circle cx="46" cy="46" r="39" fill="none" stroke="#E7EEEC" stroke-width="10"/><circle cx="46" cy="46" r="39" fill="none" stroke="#0B6B72" stroke-width="10" stroke-dasharray="235.2 245.0" transform="rotate(-90 46 46)"/></svg>
+                    <b>216<small>of 225</small></b>
+                  </div>
+                  <div><p class="rt1">Days with every fridge check done</p><p class="rt2">216 of 225 days</p></div>
+                </div>
+                <div class="vcard">
+                  <p class="vh2">Required records</p>
+                  <div class="vr"><svg width="22" height="22" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-fridge"/></svg><span>Fridge checks</span><b>666</b></div>
+                  <div class="vr"><svg width="22" height="22" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-cooking"/></svg><span>Poultry, mince, liver</span><b>268</b></div>
+                  <div class="vr"><svg width="22" height="22" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-cooling"/></svg><span>Cooling batches</span><b>38</b></div>
+                  <div class="vr"><svg width="22" height="22" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-delivery"/></svg><span>Deliveries</span><b>97</b></div>
+                  <div class="vr"><svg width="22" height="22" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-training"/></svg><span>Training records</span><b>2</b></div>
+                  <div class="vprob"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-warn"/></svg>3 problems, each with what was done</div>
+                  <p class="vh2 q">Optional records kept <span>· extra evidence</span></p>
+                  <div class="vr q"><svg width="22" height="22" fill="none" stroke="#43585A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-cooking"/></svg><span>Other cooking</span><b>144</b></div>
+                  <div class="vr q"><svg width="22" height="22" fill="none" stroke="#43585A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-hothold"/></svg><span>Hot holding</span><b>305</b></div>
+                </div>
+              </div>
+              <div class="sdock">
+                <div class="snav"><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-today"/></svg>Today</span><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-bell"/></svg>Reminders</span><span class="on"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-history"/></svg>History</span><span><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-gear"/></svg>Settings</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="pc-paper">
+            <div class="paper" role="img" aria-label="Page 1 of the verifier PDF, with sample data: the business, plan and period, a table of every record type showing if MPI requires it with records and problems, the days a fridge was not checked, the problems count with its page, and the contents with page numbers.">
+              <div class="pdf" aria-hidden="true">
+                <div class="ph"><span>Sample Café · Food safety records 14 Mar 2026 to 24 Oct 2026</span><em>Sample</em></div>
+                <h4>Food safety records</h4>
+                <div class="meta">
+                  <p>Business: Sample Café</p>
+                  <p>Simply Safe &amp; Suitable template food control plan</p>
+                  <p>Registered with Auckland Council</p>
+                  <p>Period: 14 Mar 2026 to 24 Oct 2026 (225 days)</p>
+                  <p>Last verification visit: 14 Mar 2026</p>
+                </div>
+                <table>
+                  <thead><tr><th>Record</th><th>Required by MPI</th><th class="nc">Records</th><th class="nc">Problems</th></tr></thead>
+                  <tbody>
+                    <tr><td>Fridge checks</td><td>Required</td><td class="nc">666</td><td class="nc">2</td></tr>
+                    <tr><td>Poultry, mince, liver</td><td>Required</td><td class="nc">268</td><td class="nc">0</td></tr>
+                    <tr><td>Cooling batches</td><td>Required</td><td class="nc">38</td><td class="nc">1</td></tr>
+                    <tr><td>Deliveries</td><td>Required</td><td class="nc">97</td><td class="nc">0</td></tr>
+                    <tr><td>Training records</td><td>Required</td><td class="nc">2</td><td class="nc">--</td></tr>
+                    <tr><td>Other cooking</td><td>Optional</td><td class="nc">144</td><td class="nc">--</td></tr>
+                    <tr><td>Hot holding</td><td>Optional</td><td class="nc">305</td><td class="nc">0</td></tr>
+                    <tr><td>Freezer checks</td><td>Business rule (not MPI)</td><td class="nc">221</td><td class="nc">0</td></tr>
+                  </tbody>
+                </table>
+                <div class="sum">
+                  <p>Days with every fridge check done: 216 of 225</p>
+                  <p>Days with a fridge not checked: 29 Mar, 19 Apr, 3 May, 7 Jun, 5 Jul, 9 Aug, 30 Aug, 20 Sep, 4 Oct</p>
+                  <p>Problems: 3, see page 2</p>
+                </div>
+                <h5>Contents</h5>
+                <ol>
+                  <li><span>When something went wrong</span><span>2</span></li>
+                  <li><span>Fridges and chillers</span><span>3</span></li>
+                  <li><span>Freezers (business rule)</span><span>5</span></li>
+                  <li><span>Cooking poultry, mince and liver</span><span>6</span></li>
+                  <li><span>Cooling batches</span><span>7</span></li>
+                  <li><span>Deliveries</span><span>8</span></li>
+                  <li><span>Staff training</span><span>9</span></li>
+                  <li><span>Recall tests, key dates and suppliers</span><span>10</span></li>
+                  <li><span>Optional records</span><span>11</span></li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </figure>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="paper" aria-labelledby="paper-h">
+    <div class="wrap pb24">
+      <p class="kicker">The paper problem</p>
+      <h2 class="display mt14" id="paper-h">Paper doesn't<br>survive a kitchen.</h2>
+      <ul class="pains">
+        <li><span class="x"><svg width="24" height="24" fill="none" stroke="#7E3209" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-pen"/></svg></span>Records filled in later, from memory</li>
+        <li><span class="x"><svg width="24" height="24" fill="none" stroke="#7E3209" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-wet"/></svg></span>Sheets get wet, faded or lost</li>
+        <li><span class="x"><svg width="24" height="24" fill="none" stroke="#7E3209" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-paper"/></svg></span>Days of sorting before the verifier comes</li>
+        <li><span class="x"><svg width="24" height="24" fill="none" stroke="#7E3209" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-calendar"/></svg></span>Visit date lost in an email</li>
+      </ul>
+      <p class="turn">SousMate does it as you go.
+        <svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-down"/></svg></p>
+    </div>
+  </section>
+
+  <section id="records" class="grey pad" aria-labelledby="rec-h">
+    <div class="wrap">
+      <p class="kicker">What you can record</p>
+      <h2 class="display mt14" id="rec-h">Your whole<br>kitchen day.</h2>
+      <ul class="tiles">
+        <li><span class="ti t-fridge"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-fridge"/></svg></span><h3>Fridges &amp; chillers</h3><p>Quick temperature checks.</p></li>
+        <li><span class="ti"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-snow"/></svg></span><h3>Freezers <span class="tag-opt">Record optional</span></h3><p>Still frozen? One tap per freezer, with a temperature if you want one.</p></li>
+        <li><span class="ti t-cooking"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-cooking"/></svg></span><h3>Cooking</h3><p>MPI time and temperature combos, built in.</p></li>
+        <li><span class="ti t-hothold"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-hothold"/></svg></span><h3>Hot holding <span class="tag-opt">Record optional</span></h3><p>Bain-marie and hot cabinet checks. You still keep food hot; writing it down is up to you.</p></li>
+        <li><span class="ti t-cooling"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-cooling"/></svg></span><h3>Cooling</h3><p>Both stages, with a timer.</p></li>
+        <li><span class="ti"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-flame"/></svg></span><h3>Reheating <span class="tag-opt">Record optional</span></h3><p>Steaming hot, 75°C or more. Proving your method? That is built in.</p></li>
+        <li><span class="ti t-delivery"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-delivery"/></svg></span><h3>Deliveries</h3><p>Chilled food 5°C or colder, or it goes back.</p></li>
+        <li><span class="ti"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-problem"/></svg></span><h3>Problems</h3><p>What went wrong, and what you did.</p></li>
+        <li><span class="ti"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-recall"/></svg></span><h3>Sickness, complaints &amp; recalls</h3><p>Sick staff, customer complaints and recalls, recorded as they happen.</p></li>
+        <li><span class="ti"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-training"/></svg></span><h3>Staff training</h3><p>Who learned what, and when.</p></li>
+        <li><span class="ti"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-clean"/></svg></span><h3>Cleaning <span class="tag-opt">Record optional</span></h3><p>Start from suggested tasks, then tick what you cleaned. Never says “missed”.</p></li>
+        <li><span class="ti"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-wheat"/></svg></span><h3>Allergens <span class="tag-opt">Record optional</span></h3><p>Your foods and which of the 21 allergens are in each, for when a customer asks.</p></li>
+        <li><span class="ti"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-service"/></svg></span><h3>Equipment</h3><p>Maintenance and repairs: what was done, when and who.</p></li>
+        <li><span class="ti"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-thermo"/></svg></span><h3>Calibration</h3><p>Thermometers and scales, on your own schedule. Check in ice slush, boiling water or with a test weight.</p></li>
+        <li><span class="ti"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-bell"/></svg></span><h3>Reminders</h3><p>Registration, verification, training and recall-test dates, counted down. No phone pop-ups.</p></li>
+        <li><span class="ti"><svg width="28" height="28" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-download"/></svg></span><h3>Inspection-day export</h3><p>A tidy PDF for your verifier, cleaning and calibration included.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="safe" class="pad" aria-labelledby="safe-h">
+    <div class="wrap">
+      <p class="kicker">Kept safe</p>
+      <h2 class="display mt14" id="safe-h">Nothing gets<br>wet, torn or lost.</h2>
+      <div class="keep">
+        <div class="big4">
+          <p class="yrs">4<small>years</small></p>
+          <div class="txt">
+            <p>The law says keep every record for 4 years. SousMate keeps them for you, backed up and easy to find.</p>
+            <p class="free">On Free, records stay on your device.</p>
+          </div>
+        </div>
+        <div class="k"><span class="ti"><svg width="26" height="26" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-wifioff"/></svg></span><h3>No internet? Fine.</h3><p>Keeps working in the kitchen. On SousMate, it backs up when you're online.</p></div>
+        <div class="k"><span class="ti"><svg width="26" height="26" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-devices"/></svg></span><h3>Phone, tablet or PC</h3><p>Use the shared kitchen tablet or your own phone.</p></div>
+        <div class="k"><span class="ti"><svg width="26" height="26" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-history"/></svg></span><h3>Never erased</h3><p>A correction is added. The original stays.</p></div>
+        <div class="k"><span class="ti"><svg width="26" height="26" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-team"/></svg></span><h3>Every name, every time</h3><p>Each record shows who did it and when.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing" class="grey pad" aria-labelledby="pricing-h">
+    <div class="wrap">
+      <p class="kicker">Pricing</p>
+      <h2 class="display mt14" id="pricing-h">What it<br>costs.</h2>
+      <div class="plans">
+        <article class="plan plan-free" aria-labelledby="plan-free-h">
+          <h3 id="plan-free-h">Free</h3>
+          <p class="price"><b>NZ$0</b></p>
+          <p class="alt"></p>
+          <ul class="feats">
+            <li><span class="fi"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-check"/></svg></span>Every record, on 1 device</li>
+            <li><span class="fi"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-check"/></svg></span>CSV download, always</li>
+            <li class="no"><span class="fi"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg></span>No backup, PDF or extra devices.</li>
+          </ul>
+        </article>
+        <article class="plan plan-sm" aria-labelledby="plan-sm-h">
+          <h3 id="plan-sm-h">SousMate</h3>
+          <p class="price"><b>NZ$19.99</b><span>a month</span></p>
+          <p class="alt">or <b>NZ$199</b> a year <span class="ysave">(save NZ$40)</span></p>
+          <ul class="feats">
+            <li><span class="fi"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-check"/></svg></span>Backup kept for 4 years</li>
+            <li><span class="fi"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-check"/></svg></span>All your devices</li>
+            <li><span class="fi"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-check"/></svg></span>Inspection day PDF</li>
+          </ul>
+        </article>
+      </div>
+      <div class="start">
+        <div class="btns">
+          <a class="btn btn-teal" href="https://demo.sousmate.co.nz/">Try the free demo
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+        <p class="note"><span class="ni"><svg width="22" height="22" fill="none" stroke="#0B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-mail"/></svg></span><span>Sign-up opens soon. Want to hear when? Email <a href="mailto:hello@sousmate.co.nz">hello@sousmate.co.nz</a></span></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="start" class="cta pad" aria-labelledby="cta-h">
+    <div class="wrap inner">
+      <h2 class="display" id="cta-h">Try it in<br>your kitchen.</h2>
+      <p class="lead">Works in the browser on a phone, tablet or PC. No download, nothing to set up.</p>
+      <div class="btns">
+        <a class="btn btn-white" href="https://demo.sousmate.co.nz/">Try the free demo
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+      <div class="more">
+        <p class="ask">Questions? <a href="mailto:hello@sousmate.co.nz">hello@sousmate.co.nz</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="story" class="story" aria-labelledby="story-h">
+    <div class="wrap">
+      <div class="in">
+        <p class="kicker" id="story-h">Why we built SousMate</p>
+        <blockquote><p>I grew up around my mum's food caravan and her takeaway shop here in New Zealand. Every time an inspector came, we scrambled to get the paperwork together: stained pages, damp pages, never quite tidy. Years later, in my family's other shops, it was the same story.</p><p>I've been around food businesses since I was a teenager, then spent 12 years in food manufacturing, where every job I had came down to food safety and good hygiene. I built SousMate so every shop can do its checks quickly, serve safe food, and stop keeping boxes of paper for years.</p></blockquote>
+        <p class="by">The founder of SousMate</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div class="foot-id">
+      <a class="brand" href="#top" aria-label="SousMate, back to top"><img src="/icon.svg" alt="" width="36" height="36"><span>Sous<span class="mint">Mate</span></span></a>
+      <p>Less paperwork. More cooking.</p>
+    </div>
+    <ul aria-label="More">
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="/help/">Help</a></li>
+      <li><a href="https://demo.sousmate.co.nz/">Try the free demo</a></li>
+      <li><a href="mailto:hello@sousmate.co.nz">hello@sousmate.co.nz</a></li>
+    </ul>
+    <div class="fine">
+      <p>© 2026 SousMate. Made in New Zealand · sousmate.co.nz</p>
+      <p>This site has no forms, cookies or tracking.</p>
+      <p>SousMate is an independent app. It is not part of, or approved by, the Ministry for Primary Industries (MPI) or the New Zealand Government. Check your own food control plan or national programme for what applies to you.</p>
+    </div>
+  </div>
+</footer>
+<script src="/try.js" defer></script>
+</body>
+</html>

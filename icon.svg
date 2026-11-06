@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="SousMate"><defs><clipPath id="sm-tile"><rect width="512" height="512" rx="115"/></clipPath></defs><g clip-path="url(#sm-tile)"><rect width="512" height="512" fill="#0B6B72"/><g transform="translate(256 256) scale(0.86) translate(-256 -256)"><g transform="translate(256 256) rotate(-4 0 -110) translate(-256 -256)">
+  <path d="M176 150H336V384L320 402L304 384L288 402L272 384L256 402L240 384L224 402L208 384L192 402L176 384V150Z" fill="#DFF5EE"/>
+  <rect x="196" y="176" width="64" height="18" rx="9" fill="#0B6B72"/>
+  <path d="M210 284l36 36 62-76" fill="none" stroke="#0E2A2C" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+</g><rect x="116" y="112" width="280" height="38" rx="19" fill="#8EE6C9"/><rect x="226" y="140" width="60" height="26" rx="8" fill="#0E2A2C"/></g></g></svg>
